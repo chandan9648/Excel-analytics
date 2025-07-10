@@ -20,22 +20,23 @@ app.use(express.json());
 
 
 // Routes
-const authRoutes = require("./middleware/auth");
+const authRoutes = require("./routes/authRoutes");
+
 app.use("/api/auth", authRoutes);
 
 
-app.get("/",(req, res)=>{
-  res.send("Server connected")
-})
+// app.get("/",(req, res)=>{
+//   res.send("Server connected")
+// })
 
   // Route to insert user
 app.post("/api/users", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
   console.log("Received data", req.body);
 
   try {
-    const newUser = new User({ name, email, password });
+    const newUser = new User({ username, email, password });
     await newUser.save();
     res.status(201).json({ message: " User saved", user: newUser });
   } catch (err) {

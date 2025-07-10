@@ -11,7 +11,7 @@ import { useContext } from "react";
 import Dashboard from "./pages/dashboard/DashBoard";
 
 
-
+// protected Route Wrapper
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 
-
+// Navbar
 const Nav = () => (
   <nav className="flex items-center justify-between p-4 bg-white border-0  shadow">
     <div className="text-xl font-bold text-black-800 flex items-center gap-2">
@@ -31,10 +31,11 @@ const Nav = () => (
       Excel Analytics
     </div>
     <div className="flex items-center space-x-5">
+      <Link to="/home" className="text-sm hover:underline"> 🏠  <b>Home</b></Link>
       <Link to="/dashboard" className="text-sm hover:underline">
-        🏠 <b>Dashboard</b>
+       <b>Dashboard</b>
       </Link>
-      <Link to="/" className="text-sm hover:underline">
+      <Link to="/login" className="text-sm hover:underline">
         <b>Login</b>
       </Link>
       <Link to="/signup" className="text-sm hover:underline">
@@ -44,6 +45,7 @@ const Nav = () => (
   </nav>
 );
 
+// Main app
 
 function App() {
   return (  
@@ -52,10 +54,16 @@ function App() {
    
         <Nav/>
         <Routes>
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+           <Route path="/dashboard" 
+           element={
+            <ProtectedRoute>
+                <Dashboard/>
+            </ProtectedRoute>
+           } 
+           />
         </Routes>
       </BrowserRouter>
     </AuthProvider> 

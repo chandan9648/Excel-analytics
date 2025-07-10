@@ -9,13 +9,12 @@ const Login = () => {
    const navigate = useNavigate();
 
   const handleChange = e => setData({ ...data, [e.target.name]: e.target.value });
-
+  
   const handleSubmit = async e => {
     e.preventDefault();
     try{
     const res = await axios.post("http://localhost:5000/api/auth/login", data);
-    login(res.data.token);
-    localStorage.setItem("token", res.data.token);
+      login(res.data.token);
       navigate("/dashboard");  
     } catch (err){
        console.error("Login failed:", err);

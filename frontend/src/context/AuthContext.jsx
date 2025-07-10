@@ -8,6 +8,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -21,7 +22,21 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const contextValue = useMemo(() => ({ user, setUser }), [user]);
+    // Login = Save token + set user
+  const login = (token) => {
+    localStorage.setItem("token", token);
+    const decoded = jwtDecode(token);
+    setUser(decoded);
+  };
+
+  
+  // Logout = Remove token + reset user
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
+  const contextValue = useMemo(() => ({ user, login, logout, }), [user]);
 
   return (
     <AuthContext.Provider value={contextValue}>
