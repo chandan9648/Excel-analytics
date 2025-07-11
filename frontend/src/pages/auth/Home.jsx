@@ -19,7 +19,7 @@ const Home = () => {
         </div>
 
         {/* Right Side: Welcome content */}
-        <div className="bg-white p-12 w-100 ml-25 rounded shadow text-center">
+        <div className="bg-white p-18 w-100 ml-20 rounded shadow text-center">
           <h1 className="text-4xl font-bold mb-5 text-green-700">Excel Analytics</h1>
           
           {user ? (

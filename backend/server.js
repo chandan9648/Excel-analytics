@@ -25,14 +25,10 @@ const authRoutes = require("./routes/authRoutes");
 app.use("/api/auth", authRoutes);
 
 
-// app.get("/",(req, res)=>{
-//   res.send("Server connected")
-// })
-
   // Route to insert user
 app.post("/api/users", async (req, res) => {
-  const { username, email, password } = req.body;
 
+  const { username, email, password } = req.body;
   console.log("Received data", req.body);
 
   try {
