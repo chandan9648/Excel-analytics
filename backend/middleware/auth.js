@@ -1,18 +1,20 @@
-const express = require("express");
-const router = express.Router();
-const User = require("../models/User");
+import jwt from 'jsonwebtoken';
 
-router.post("/signup", async (req, res) => {
-  const { username, email, password } = req.body;
+const auth = (req, res, next) => {
+  const token = req.header("authorization")?.replace("Bearer ", "");
+  if (!token) {
+    return res.status(401).json({ message: "No token, authorization denied" });
+  }
+  console.log('Token received:', token);
+
 
   try {
-    const user = new User({ username, email, password });
-    await user.save();
-    res.status(201).json({ message: "User created", user });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = { id: decoded.id || decoded._id, role: decoded.role };
+    next();
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Signup failed" });
+    res.status(401).json({ message: "Token is not valid" });
   }
-});
+};
 
-module.exports = router;
+export default auth;

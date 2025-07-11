@@ -1,9 +1,9 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const connectDB = require("./config/db");
-const User = require("./models/User");
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 
 // Load env bars
 dotenv.config();
@@ -19,28 +19,15 @@ app.use(cors());
 app.use(express.json());
 
 
-// Routes
-const authRoutes = require("./routes/authRoutes");
-
 app.use("/api/auth", authRoutes);
 
 
-  // Route to insert user
-app.post("/api/users", async (req, res) => {
-
-  const { username, email, password } = req.body;
-  console.log("Received data", req.body);
-
-  try {
-    const newUser = new User({ username, email, password });
-    await newUser.save();
-    res.status(201).json({ message: " User saved", user: newUser });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-
-// Start server
-app.listen(5000, () =>
-   console.log("Server running on port" ));
+ // Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
+.then(() => {
+  console.log("MongoDB connected");
+  app.listen(process.env.PORT || 5000, () =>
+    console.log(`Server is runnimg on port: ${process.env.PORT || 5000}`)
+  );
+})
+.catch(err => console.log("MongoDB connection error:", err));
