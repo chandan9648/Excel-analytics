@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
-const user = require("./models/User");
+const User = require("./models/User");
 
 // Load env bars
 dotenv.config();
