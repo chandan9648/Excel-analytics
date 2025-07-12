@@ -13,14 +13,16 @@ export const signup = async (req, res) => {
       return res.status(400).json({ msg: 'All fields are required' });
     }
 
-    const existing = await User.findOne({ email });
+const trimmedEmail = email.toLowerCase().trim()
+
+    const existing = await User.findOne({ email: trimmedEmail });
     if (existing) return res.status(400).json({ msg: 'User already exists' });
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashed = await bcrypt.hash(password.trim(), 10);
 
     const user = await User.create({
       name, 
-      email,
+      email: trimmedEmail,
       password: hashed,
       role,
     });
@@ -39,11 +41,16 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email: email.toLowerCase() });
-    if (!user) return res.status(400).json({ msg: 'Invalid credential' });
+        const trimmedEmail = email.toLowerCase().trim();
+    const trimmedPassword = password.trim();
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: 'Invalid email / password' });
+    const user = await User.findOne({ email: trimmedEmail });
+    if (!user) 
+      return res.status(400).json({ msg: 'Invalid credential' });
+
+    const isMatch = await bcrypt.compare(trimmedPassword, user.password);
+    if (!isMatch)
+       return res.status(400).json({ msg: 'Invalid email / password' });
 
     const token = jwt.sign(
       {
