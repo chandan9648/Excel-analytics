@@ -9,6 +9,9 @@ import Home from "./pages/auth/Home";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 import Dashboard from "./pages/dashboard/DashBoard";
+import x from "./assets/x.png";
+
+
 
 
 // protected Route Wrapper
@@ -22,11 +25,11 @@ const ProtectedRoute = ({ children }) => {
 // Navbar
 const Nav = () => (
   <nav className="flex items-center justify-between p-4 bg-white border-0  shadow">
-    <div className="text-xl font-bold text-black-800 flex items-center gap-2">
+    <div className="text-xl font-bold text-green-900 flex items-center gap-2">
       <img
-        src="https://img.icons8.com/color/48/excel.png"
+        src={x}
         alt="Logo"
-        className="w-6 h-6"
+        className="w-10 h-6  "
       />
       Excel Analytics
     </div>
