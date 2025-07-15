@@ -1,53 +1,42 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import API from "../../api";
 
 const Dashboard = () => {
-  const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [file, setFile] = useState(null);
+  const [history, setHistory] = useState([]);
 
-  if (!user) return <Navigate to="/login" />;
-
-  const handleLogout = () => {
-    logout();           // clear token + context
-    navigate("/login"); // redirect to login
+  const fetchHistory = async () => {
+    const res = await API.get("/upload/history");
+    setHistory(res.data);
   };
 
+  const upload = async () => {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    await API.post("/upload/upload", formData);
+    setFile(null);
+    fetchHistory();
+  };
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
+
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">Welcome, {user?.email || "User"}</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
-          Logout
-        </button>
-      </div>
+    <div className="p-10 bg-green-100">
+      <h2 className="text-2xl mb-4">Dashboard</h2>
+      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+      <button onClick={upload} className="ml-2 bg-green-600 text-white px-4 py-2">Upload</button>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 bg-green-100 shadow rounded-lg">
-          <h2 className="text-xl font-semibold">Users</h2>
-          <p className="text-gray-500 text-sm mt-2">Total: 120</p>
-        </div>
-
-        <div className="p-4 bg-green-100 shadow rounded-lg">
-          <h2 className="text-xl font-semibold">Reports</h2>
-          <p className="text-gray-500 text-sm mt-2">Generated: 45</p>
-        </div>
-
-        <div className="p-4 bg-green-100 shadow rounded-lg">
-          <h2 className="text-xl font-semibold">Files Uploaded</h2>
-          <p className="text-gray-500 text-sm mt-2">This Month: 30</p>
-        </div>
-      </div>
-
-      <div className="mt-8 bg-green-100 shadow p-6 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
-        <ul className="list-disc ml-5 space-y-2 text-gray-700">
-          <li>User Chandan uploaded an Excel file.</li>
-          <li>Admin generated a summary report.</li>
-          <li>New user registered: example@gmail.com</li>
+      <div className="mt-6">
+        <h3 className="text-xl">Upload History</h3>
+        <ul className="mt-2 space-y-2">
+          {history.map((item, i) => (
+            <li key={i} className="bg-gray-100 p-2 rounded">
+              {item.filename} - {new Date(item.createdAt).toLocaleString()}
+            </li>
+          ))}
         </ul>
       </div>
     </div>
