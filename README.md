@@ -9,7 +9,8 @@ step2. cd backend = npx nodemon server.js
 
 New terminal
 
-step3. cd frontend = npm run dev
+step3. cd frontend = npm run dev if it not work then run npm intsall
+=> npm run dev
 then follow given link
 
 
