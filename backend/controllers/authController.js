@@ -6,9 +6,9 @@ import jwt from 'jsonwebtoken';
 // signup controller
 export const signup = async (req, res) => {
   try {
-    const { name, email, password, role = 'user' } = req.body;
+    const { name, email, password, role } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
       return res.status(400).json({ msg: 'All fields are required' });
     }
 
@@ -19,13 +19,14 @@ export const signup = async (req, res) => {
     if (existing) {
       return res.status(400).json({ msg: 'User already exists' });
     }
-
+    const hashedPassword = await bcrypt.hash(trimmedPassword, 10);
     
     const user = await User.create({
       name,
       email: trimmedEmail,
       password: trimmedPassword,
-      role,
+      role
+      
     });
 
     return res.status(201).json({
@@ -43,11 +44,11 @@ export const signup = async (req, res) => {
 // login controlller
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role} = req.body;
     const trimmedEmail = email.toLowerCase().trim();
     const trimmedPassword = password.trim();
 
-    const user = await User.findOne({ email: trimmedEmail });
+    const user = await User.findOne({ email: trimmedEmail});
       //  console.log("User found:", user);
 
     if (!user) {
@@ -67,6 +68,7 @@ export const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
@@ -79,10 +81,22 @@ export const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+         role: user.role,
       }
     });
   } catch (err) {
     res.status(500).json({ msg: err.message });
+  }
+};
+
+
+// Get total user count
+export const getUserCount = async (req, res) => {
+  try {
+    const count = await User.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ msg: 'Failed to fetch user count' });
   }
 };
 
