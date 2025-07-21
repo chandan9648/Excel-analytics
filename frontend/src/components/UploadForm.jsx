@@ -19,7 +19,7 @@ const UploadForm = () => {
   };
 
   return (
-    <div className=" flex flex-col items-center justify-center w-full bg-fixed">
+    <div className=" flex flex-col items-center justify-center w-full bg-fixed ">
       <h1 className="text-3xl font-bold mb-6">
         Upload <span className="text-blue-600">Excel Data</span> & Visualize
       </h1>

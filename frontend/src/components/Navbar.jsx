@@ -1,17 +1,45 @@
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import x from "../assets/x.png";
 
-// const Navbar = ({ role }) => (
-//   <nav className="bg-gray-800 text-white p-4 flex justify-between">
-//     <span className="font-bold text-xl">Excel Dashboard</span>
-//     <div className="space-x-4">
-//       <Link to="/dashboard">Dashboard</Link>
-//       {role === "admin" && <Link to="/admin">Admin</Link>}
-//       <button onClick={() => {
-//         localStorage.clear();
-//         window.location.href = "/login";
-//       }}>Logout</button>
-//     </div>
-//   </nav>
-// );
+const Navbar = () => {
+  const { user } = useContext(AuthContext);
 
-// export default Navbar;
+  return (
+    <nav className="flex items-center justify-between  py-2 px-4 bg-white border-0 shadow ">
+      <div className="text-2xl font-bold text-green-900 flex items-center gap-2">
+        <img src={x} alt="Logo" className="w-12 h-8" />
+        Excel Analytics
+      </div>
+      <div className="flex items-center space-x-5">
+        <Link to="/home" className="text-sm hover:underline"></Link>
+        {user && (
+          <>
+            <Link to="/dashboard" className="text-sm hover:underline"><b>Dashboard</b></Link>
+            <Link to="/admin" className="text-sm hover:underline"><b>Admin</b></Link>
+            <Link to="/upload" className="text-sm hover:underline"></Link>
+          </>
+        )}
+        {!user ? (
+          <>
+            <Link to="/login" className="text-lg hover:underline bg-green-500 rounded-xl p-2"><b>Login</b></Link>
+            <Link to="/signup" className="text-lg hover:underline bg-green-500 rounded-xl p-2"><b>Signup</b></Link>
+          </>
+        ) : (
+          <button
+            className="text-sm hover:underline"
+            onClick={() => {
+              localStorage.clear();
+              window.location.href = "/login";
+            }}
+          >
+            <b>Logout</b>
+          </button>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

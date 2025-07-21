@@ -7,6 +7,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true); // ✅ Step 1 - add loading
 
 
   useEffect(() => {
@@ -18,8 +19,10 @@ export const AuthProvider = ({ children }) => {
       } catch (err) {
         console.log('Invalid token:', err);
         localStorage.removeItem('token');
+              setUser(null);
       }
     }
+        setLoading(false); // ✅ Step 2 - mark loading as false after checking
   }, []);
 
     // Login = Save token + set user
@@ -36,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const contextValue = useMemo(() => ({ user, login, logout, }), [user]);
+  const contextValue = useMemo(() => ({ user, login, logout, loading }), [user, loading]);
 
   return (
     <AuthContext.Provider value={contextValue}>

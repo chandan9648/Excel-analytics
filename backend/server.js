@@ -6,6 +6,8 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminUploadRoutes from "./routes/adminUploadRoutes.js";
 
+
+
 // Load env bars
 dotenv.config();
 
@@ -21,6 +23,7 @@ app.use(express.json());
 
 
 app.use("/api/auth", authRoutes);
+
 
 app.use("/api/upload", adminUploadRoutes); // reuse "/upload/all"
 
