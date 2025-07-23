@@ -29,12 +29,27 @@ export const signup = async (req, res) => {
       
     });
 
+   //  Generate token
+    const token = jwt.sign(
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+
     return res.status(201).json({
       msg: 'User registered successfully',
+      token,
       data: {
-       role: user.role
+      role: user.role
       }
     });
+
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -63,6 +78,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ msg: 'Invalid email/password' });
     }
 
+     //  Generate token
     const token = jwt.sign(
       {
         id: user._id,
@@ -79,10 +95,11 @@ export const login = async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name,
+        // name: user.name,
         email: user.email,
-         role: user.role,
-      }
+        role: user.role,
+      },
+      
     });
   } catch (err) {
     res.status(500).json({ msg: err.message });
