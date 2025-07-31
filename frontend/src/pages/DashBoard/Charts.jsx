@@ -66,7 +66,7 @@ const Charts = () => {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="ml-64 p-10 bg-green-50 min-h-screen w-full">
+      <div className="ml-64 p-10 bg-green-50 min-h-screen w-full fixed">
         <h2 className="text-3xl font-bold mb-6 text-green-800">📈 Data Chart</h2>
 
         {/* Axis Selectors */}

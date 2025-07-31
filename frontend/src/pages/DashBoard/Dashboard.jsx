@@ -4,11 +4,19 @@ import Sidebar from "../../components/Sidebar";
 
 const Dashboard = () => {
   const [userCount, setUserCount] = useState(0);
+  const [loggedInCount, setLoggedInCount] = useState(0);
   const [history, setHistory] = useState([]);
 
-  const fetchUserCount = async () => {
-    const res = await API.get("/auth/users-count");
-    setUserCount(res.data.count);
+  // Fetch both user stats in one call and log for debugging
+  const fetchUserStats = async () => {
+    try {
+      const res = await API.get("/auth/user-stats");
+      console.log("User stats response:", res.data);
+      setUserCount(res.data.total);
+      setLoggedInCount(res.data.loggedIn);
+    } catch (err) {
+      console.error("Failed to fetch user stats", err);
+    }
   };
 
   const fetchUploadHistory = async () => {
@@ -17,12 +25,13 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchUserCount();
-    fetchUploadHistory();
+      fetchUserStats();
+      fetchUploadHistory();
+      
   }, []);
 
   return (
-    <div className="flex">
+      <div className="flex">
       <Sidebar />
       <div className="ml-64 p-10 w-screen bg-green-50 min-h-screen fixed">
         <h2 className="text-3xl font-bold mb-6 text-green-800">📊 Dashboard</h2>
@@ -32,6 +41,10 @@ const Dashboard = () => {
           <div className="bg-white p-6 shadow rounded">
             <h3 className="text-xl text-green-700">Total Users</h3>
             <p className="text-3xl">{userCount}</p>
+          </div>
+          <div className="bg-white p-6 shadow rounded">
+            <h3 className="text-xl text-green-700">Logged In Users</h3>
+            <p className="text-3xl">{loggedInCount}</p>
           </div>
           <div className="bg-white p-6 shadow rounded">
             <h3 className="text-xl text-green-700">Files Uploaded</h3>
