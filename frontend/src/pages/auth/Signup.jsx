@@ -50,18 +50,6 @@ const Signup = () => {
         <label className="">Password</label>
         <input type="password" name="password" placeholder="Password" onChange={handleChange}
           className="mb-6 w-full px-4 py-2 border rounded-1 focus:outline-none" required />
-           
-           {/*  Role Selector */}
-        {/* <label>Role as</label>
-        <select
-          name="role"
-          value={data.role}
-          onChange={handleChange}
-          className="mb-6 w-full px-4 py-2 border rounded focus:outline-none"
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select> */}
 
         <button type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">Sign Up</button>
