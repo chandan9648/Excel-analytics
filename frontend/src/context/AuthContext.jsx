@@ -1,13 +1,17 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect, useMemo } from 'react';
 import {jwtDecode} from 'jwt-decode';
+import API from '../api';
 
+
+
+const API_Base_URL = "http://localhost:5000";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true); // ✅ Step 1 - add loading
+    const [loading, setLoading] = useState(true); 
 
 
   useEffect(() => {
@@ -18,12 +22,15 @@ export const AuthProvider = ({ children }) => {
         setUser(decoded);
       } catch (err) {
         console.log('Invalid token:', err);
+        
         localStorage.removeItem('token');
               setUser(null);
       }
     }
-        setLoading(false); // ✅ Step 2 - mark loading as false after checking
+    setLoading(false);
   }, []);
+
+  
 
     // Login = Save token + set user
   const login = (token) => {

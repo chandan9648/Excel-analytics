@@ -11,7 +11,9 @@ router.post('/login', login);
 
 // ✅ Total users
 router.get("/users-count", protect, isAdmin, getUserCount);
-router.get('/user-stats', getUserStats);
+router.get("/user-stats", getUserStats);
+
+
 
 router.get("/loggedin-count", protect, isAdmin, getLoggedInUserCount);
 
