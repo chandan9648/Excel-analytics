@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,user} from "react";
 import API from "../../api";
 import Sidebar from "../../components/Sidebar";
+
 
 const Dashboard = () => {
   const [userCount, setUserCount] = useState(0);
@@ -31,11 +32,18 @@ const Dashboard = () => {
   }, []);
 
   return (
-      <div className="flex">
+    <div className="flex">
       <Sidebar />
-      <div className="ml-64 p-10 w-screen bg-green-50 min-h-screen fixed">
-        <h2 className="text-3xl font-bold mb-6 text-green-800">📊 Dashboard</h2>
-
+      <div className="ml-64 p-10 w-screen bg-green-50 min-h-screen ">
+        {/* <h2 className="text-3xl font-bold mb-6 text-green-800">📊 Dashboard</h2> */}
+       <div className=" lg:mb-5 bg-white rounded p-5 shadow">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Welcome back, {user?.name || "User"}! 👋
+              </h1>
+              <p className="text-gray-600">
+                Here's what's happening with your data analytics today.
+              </p>
+        </div>
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           <div className="bg-white p-6 shadow rounded">
