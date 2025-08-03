@@ -14,6 +14,12 @@ const uploadSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["success", "fail"],
+    default: "success",
+    required: true,
+  },  
 }, { timestamps: true });
 
 const Upload = mongoose.model("Upload", uploadSchema);

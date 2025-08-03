@@ -40,7 +40,7 @@ const Login = ({setRole}) => {
   
 
   return (
-    <div className="min-h-screen flex min-w-screen items-center justify-center bg-green-200 fixed">
+    <div className="min-h-screen flex min-w-screen items-center justify-center fixed  bg-linear-65 from-purple-500 to-green-500">
 
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg   shadow-lg w-90">
         <h1 className="text-2xl font-bold mb-2 text-center">Welcome back!</h1>
@@ -67,10 +67,10 @@ const Login = ({setRole}) => {
           className="mb-8 w-full px-4 py-2 border rounded focus:outline-none" required />
 
         <button type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">Login</button>
+          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition cursor-pointer ">Login</button>
 
         <p className="mt-4 text-sm text-center">
-          Don’t have an account? <Link to="/signup" className="text-blue-500">Signup</Link>
+          Don’t have an account? <Link to="/signup" className="text-blue-500 cursor-pointer">Signup</Link>
         </p>
       </form>
     </div>
