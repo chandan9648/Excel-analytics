@@ -36,7 +36,6 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/home" element={<Home />} /> */}
         <Route path="/login" element={<Login setRole={setRole} />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/upload" element={

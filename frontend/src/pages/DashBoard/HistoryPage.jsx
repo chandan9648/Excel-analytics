@@ -28,7 +28,7 @@ const HistoryPage = () => {
 
       {/* Main Content */}
       <div className="ml-64 p-8 w-full bg-green-50 min-h-screen fixed">
-        <h2 className="text-2xl font-semibold mb-6 text-green-600">Your Upload History</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-blue-600">Your Upload History</h2>
 
         {loading ? (
           <p>Loading...</p>

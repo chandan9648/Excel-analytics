@@ -16,15 +16,13 @@ const UploadForm = () => {
       const res = await axios.post("http://localhost:5000/api/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          // Authorization: `Bearer ${token}`, // if protected
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming you store token in localStorage
         },
       });
 
       const parsedData = res.data.data;
       if (!parsedData || parsedData.length === 0) {
         alert("Upload succeeded but no data returned.");
-      } else {
-        alert("File uploaded successfully");
       }
 
       setExcelData(parsedData || []);
@@ -37,35 +35,48 @@ const UploadForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full bg-white p-5 h-screen">
+    <div className="flex flex-col items-center justify-center w-full bg-white p-5 min-h-screen">
+      {/* Dynamic Heading */}
       <h1 className="text-3xl font-bold mb-6">
-        Upload <span className="text-blue-600">Excel</span> File
+        {excelData.length > 0 ? (
+          <>
+            Uploaded <span className="text-blue-600">Data</span>
+          </>
+        ) : (
+          <>
+            Upload <span className="text-blue-600">Excel</span> File
+          </>
+        )}
       </h1>
 
-      <div className="w-full max-w-xl bg-green-200 p-5 rounded shadow-md flex items-center gap-3">
-        <input
-          type="file"
-          accept=".xlsx, .xls"
-          onChange={(e) => setFile(e.target.files[0])}
-          className="flex-grow border rounded px-4 py-2"
-        />
-        <button
-          onClick={handleUpload}
-          className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded"
-          disabled={uploading}
-        >
-          {uploading ? "Uploading..." : "Upload"}
-        </button>
-      </div>
+      {/* Upload section — only visible when no data is displayed */}
+      {excelData.length === 0 && (
+        <>
+          <div className="w-full max-w-xl bg-green-200 p-5 rounded shadow-md flex items-center gap-3">
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              onChange={(e) => setFile(e.target.files[0])}
+              className="flex-grow border rounded px-4 py-2"
+            />
+            <button
+              onClick={handleUpload}
+              className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded"
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Upload"}
+            </button>
+          </div>
 
-      {/* No Data Message */}
-      {excelData.length === 0 && !uploading && (
-        <p className="mt-4 text-gray-500">No Excel data to display yet.</p>
+          {!uploading && (
+            <p className="mt-4 text-gray-500">No Excel data to display yet.</p>
+          )}
+        </>
       )}
 
       {/* Display Excel Table */}
       {excelData.length > 0 && (
-        <div className="overflow-x-auto mt-6">
+        <div className="overflow-x-auto mt-6 w-full max-w-6xl">
           <table className="table-auto border-collapse border border-gray-400 w-full">
             <thead>
               <tr>

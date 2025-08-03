@@ -52,7 +52,7 @@ const Signup = () => {
           className="mb-6 w-full px-4 py-2 border rounded-1 focus:outline-none" required />
 
         <button type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">Sign Up</button>
+          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition cursor-pointer">Sign Up</button>
 
         <p className="mt-4 text-sm text-center">
           Already have an account? <Link to="/login" className="text-blue-500">Login</Link>
