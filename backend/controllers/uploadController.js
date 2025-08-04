@@ -18,11 +18,7 @@ export const uploadExcel = async (req, res) => {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = xlsx.utils.sheet_to_json(sheet);
 
-    // Debug logs
-    // console.log("📄 File received:", req.file.originalname);
-    // console.log("👤 Uploaded by user ID:", req.user?.id);
-    // console.log("✅ Rows parsed:", jsonData.length);
-
+    
     // Save to database with status = success
     await Upload.create({
       user: req.user?.id || null,
@@ -59,3 +55,33 @@ export const uploadExcel = async (req, res) => {
     });
   }
 };
+
+// delete controller
+export const deleteUpload = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await Upload.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Upload not found" });
+    }
+
+    res.status(200).json({ message: "Upload deleted successfully" });
+  } catch (error) {
+    console.error("❌ Delete error:", error.message);
+    res.status(500).json({ message: "Failed to delete upload" });
+  }
+};
+
+export const getUploadHistory = async (req, res) => {
+  try {
+    const uploads = await Upload.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.json(uploads);
+  } catch (err) {
+    console.error("❌ Failed to get upload history:", err.message);
+    res.status(500).json({ message: "Error fetching uploads" });
+  }
+};
+
+

@@ -16,7 +16,7 @@ const Sidebar = () => {
           <FaHistory /> File History
         </Link>
         <Link to="/dashboard/charts" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1   hover:text-green-500">
-          <FaChartBar /> Charts
+          <FaChartBar /> Charts Visuals
         </Link>
         <Link to="/logout" onClick={() => {
           localStorage.removeItem("role");

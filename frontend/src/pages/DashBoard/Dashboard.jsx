@@ -14,9 +14,7 @@ const Dashboard = () => {
   const fetchUploadHistory = async () => {
     try {
       setLoading(true);
-
-      // ✅ Clear all existing data before reloading
-      setHistory([]);
+      // setHistory([]);
       setTotalUploads(0);
       setSuccessUploads(0);
       setFailedUploads(0);
@@ -36,6 +34,26 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await API.delete(`/upload/${id}`);
+      fetchUploadHistory(); // Refresh after delete
+    } catch (err) {
+      alert("Delete failed");
+      console.error(err);
+    }
+  };
+
+  const handleDownload = (filename, data) => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${filename.replace(/\.[^/.]+$/, "")}.json`;
+    link.click();
   };
 
   useEffect(() => {
@@ -86,20 +104,41 @@ const Dashboard = () => {
         ) : (
           <ul className="space-y-3">
             {history.map((item, i) => (
-              <li key={i} className="bg-white p-4 rounded shadow">
-                <p className="font-medium">{item.filename}</p>
-                <p className="text-sm text-gray-500">
-                  {new Date(item.createdAt).toLocaleString()} •{" "}
-                  <span
-                    className={
-                      item.status === "success"
-                        ? "text-green-600"
-                        : "text-red-500"
-                    }
+              <li
+                key={i}
+                className="bg-white p-4 rounded shadow flex justify-between items-center"
+              >
+                <div>
+                  <p className="font-medium">{item.filename}</p>
+                  <p className="text-sm text-gray-500">
+                    {new Date(item.createdAt).toLocaleString()} •{" "}
+                    <span
+                      className={
+                        item.status === "success"
+                          ? "text-green-600"
+                          : "text-red-500"
+                      }
+                    >
+                      {item.status}
+                    </span>
+                  </p>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => handleDownload(item.filename, item.parsedData)}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer"
                   >
-                    {item.status}
-                  </span>
-                </p>
+                    Download
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(item._id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

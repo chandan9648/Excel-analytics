@@ -1,13 +1,19 @@
 import { useState } from "react";
 import axios from "axios";
+import { Upload, FileText, Trash2 } from "lucide-react";
 
 const UploadForm = () => {
   const [file, setFile] = useState(null);
   const [excelData, setExcelData] = useState([]);
   const [uploading, setUploading] = useState(false);
 
+  const handleFileSelect = (e) => {
+    setFile(e.target.files[0]);
+  };
+
   const handleUpload = async () => {
     if (!file) return alert("Please select a file.");
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -16,91 +22,107 @@ const UploadForm = () => {
       const res = await axios.post("http://localhost:5000/api/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming you store token in localStorage
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
       const parsedData = res.data.data;
-      if (!parsedData || parsedData.length === 0) {
-        alert("Upload succeeded but no data returned.");
-      }
-
       setExcelData(parsedData || []);
     } catch (err) {
-      console.error("Error Uploading", err);
+      console.error("Error uploading:", err);
       alert(err.response?.data?.message || "Upload failed");
     } finally {
       setUploading(false);
     }
   };
 
-  return (
-    <div className="flex flex-col items-center justify-center w-full bg-white p-5 min-h-screen">
-      {/* Dynamic Heading */}
-      <h1 className="text-3xl font-bold mb-6">
-        {excelData.length > 0 ? (
-          <>
-            Uploaded <span className="text-blue-600">Data</span>
-          </>
-        ) : (
-          <>
-            Upload <span className="text-blue-600">Excel</span> File
-          </>
-        )}
-      </h1>
+  const handleDelete = () => {
+    setFile(null);
+    setExcelData([]);
+  };
 
-      {/* Upload section — only visible when no data is displayed */}
-      {excelData.length === 0 && (
-        <>
-          <div className="w-full max-w-xl bg-green-200 p-5 rounded shadow-md flex items-center gap-3">
+  return (
+    <div className="min-h-screen bg-green-50 flex items-start justify-start p-8">
+      <div className="w-full bg-white rounded-lg shadow-md p-8 max-w-5xl mx-auto">
+        <h2 className="text-2xl font-bold text-center mb-4 text-green-700">Upload Excel Files</h2>
+        <p className="text-center text-gray-600 mb-8">
+          Easily upload and manage your Excel files. Drag and drop files, or click the button below to browse.
+        </p>
+
+        {/* Upload UI */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+          <div className="border-2 border-dashed border-green-400 p-6 rounded-md w-full md:w-1/2 flex flex-col items-center justify-center">
+            <Upload className="w-10 h-10 text-green-600 mb-2" />
+            <p className="mb-2 text-sm text-gray-500">Drag and Drop your files here</p>
+            <label htmlFor="fileInput" className="cursor-pointer bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded inline-flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Browse Files
+            </label>
             <input
+              id="fileInput"
               type="file"
               accept=".xlsx, .xls"
-              onChange={(e) => setFile(e.target.files[0])}
-              className="flex-grow border rounded px-4 py-2"
+              onChange={handleFileSelect}
+              className="hidden"
             />
-            <button
-              onClick={handleUpload}
-              className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded"
-              disabled={uploading}
-            >
-              {uploading ? "Uploading..." : "Upload"}
-            </button>
           </div>
 
-          {!uploading && (
-            <p className="mt-4 text-gray-500">No Excel data to display yet.</p>
+          {/* File preview */}
+          {file && (
+            <div className="flex items-center bg-green-100 border border-green-300 px-4 py-2 rounded w-full md:w-1/2 justify-between">
+              <span className="text-green-800 font-medium flex items-center gap-2">
+                <FileText className="w-4 h-4" />
+                {file.name}
+              </span>
+              <button onClick={handleDelete} className="text-red-500 hover:text-red-700">
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </div>
           )}
-        </>
-      )}
+        </div>
 
-      {/* Display Excel Table */}
-      {excelData.length > 0 && (
-        <div className="overflow-x-auto mt-6 w-full max-w-6xl">
-          <table className="table-auto border-collapse border border-gray-400 w-full">
-            <thead>
-              <tr>
-                {Object.keys(excelData[0]).map((col) => (
-                  <th key={col} className="border border-gray-300 px-3 py-1 bg-gray-200">
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {excelData.map((row, idx) => (
-                <tr key={idx}>
-                  {Object.values(row).map((cell, i) => (
-                    <td key={i} className="border border-gray-300 px-3 py-1">
-                      {cell}
-                    </td>
+        {/* Upload button */}
+        {file && (
+          <div className="text-center mt-6">
+            <button
+              onClick={handleUpload}
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Upload Files"}
+            </button>
+          </div>
+        )}
+
+        {/* Table View */}
+        {excelData.length > 0 && (
+          <div className="mt-10 overflow-x-auto">
+            <h3 className="text-xl font-semibold mb-4 text-green-800">Uploaded Data Preview</h3>
+            <table className="w-full border-collapse border border-gray-300 text-sm">
+              <thead className="bg-gray-100">
+                <tr>
+                  {Object.keys(excelData[0]).map((col) => (
+                    <th key={col} className="border border-gray-300 px-3 py-2 text-left">
+                      {col}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {excelData.map((row, idx) => (
+                  <tr key={idx}>
+                    {Object.values(row).map((cell, i) => (
+                      <td key={i} className="border border-gray-300 px-3 py-1">
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
