@@ -7,7 +7,7 @@ const Home = () => {
   // const {  } = useContext(AuthContext);
 
   return (
-    <div className="min-h-screen bg-green-100 flex items-center justify-center fixed w-full">
+    <div className="min-h-screen bg-linear-65 from-purple-500 to-green-500 flex items-center justify-center fixed w-full">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-8 bg-green-200">
         
         {/* Left Side: Image */}

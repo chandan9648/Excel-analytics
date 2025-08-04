@@ -23,8 +23,7 @@ const Signup = () => {
          await axios.post("http://localhost:5000/api/auth/signup", data);
          navigate("/login");
         } catch (err) {
-          console.log("Sending data:", data);
-
+      
            console.error("Signup failed:", err);
            setError(err.response?.data?.msg || "Signup failed. Try again.");
         }
