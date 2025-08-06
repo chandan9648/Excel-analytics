@@ -76,7 +76,7 @@ const Charts = () => {
 
       <div className="ml-64 p-10 w-full">
         <h2 className="text-3xl font-bold text-gray-800 mb-8">
-          📊 Data Visualizations
+          📊 Chart Visualizations
         </h2>
 
         {/* Dropdowns */}
