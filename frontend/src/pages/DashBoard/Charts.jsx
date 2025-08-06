@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Line, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
+  ArcElement,
   BarElement,
   LineElement,
   PointElement,
@@ -11,12 +12,15 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
 import API from "../../api";
 import Sidebar from "../../components/Sidebar";
+import ThreeDChartWrapper from "./ThreeDChartWrapper";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
+  ArcElement,
   BarElement,
   LineElement,
   PointElement,
@@ -52,29 +56,35 @@ const Charts = () => {
       {
         label: `${yKey} vs ${xKey}`,
         data: data.map((item) => item[yKey]),
-        backgroundColor: "rgba(75, 192, 192, 0.5)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
+        backgroundColor:
+          chartType === "donut"
+            ? ["#36CFC9", "#FFB84D", "#FF85C0", "#91D5FF", "#FFD666", "#B37FEB"]
+            : chartType === "bar"
+            ? "rgba(255, 99, 132, 0.6)"
+            : "transparent",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 2,
         fill: false,
+        stepped: chartType === "digital",
       },
     ],
   };
 
   return (
-    <div className="flex">
-      {/* Sidebar */}
+    <div className="flex bg-gray-100 min-h-screen">
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="ml-64 p-10 bg-green-50 min-h-screen w-full fixed">
-        <h2 className="text-3xl font-bold mb-6 text-green-800">📈 Data Chart</h2>
+      <div className="ml-64 p-10 w-full">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8">
+          📊 Data Visualizations
+        </h2>
 
-        {/* Axis Selectors */}
-        <div className="flex gap-4 mb-6">
+        {/* Dropdowns */}
+        <div className="flex flex-wrap gap-4 mb-6">
           <select
             onChange={(e) => setXKey(e.target.value)}
             value={xKey}
-            className="border p-2 rounded"
+            className="border p-2 rounded-lg bg-white shadow"
           >
             <option value="">Select X-axis</option>
             {keys.map((key) => (
@@ -87,7 +97,7 @@ const Charts = () => {
           <select
             onChange={(e) => setYKey(e.target.value)}
             value={yKey}
-            className="border p-2 rounded"
+            className="border p-2 rounded-lg bg-white shadow"
           >
             <option value="">Select Y-axis</option>
             {keys.map((key) => (
@@ -100,25 +110,43 @@ const Charts = () => {
           <select
             onChange={(e) => setChartType(e.target.value)}
             value={chartType}
-            className="border p-2 rounded"
+            className="border p-2 rounded-lg bg-white shadow"
           >
-            <option value="bar">Bar</option>
-            <option value="line">Line</option>
+            <optgroup label="2D Charts">
+              <option value="bar">Bar Chart</option>
+              <option value="line">Line Chart</option>
+              <option value="digital">Digital Signal</option>
+              <option value="donut">Donut Chart</option>
+            </optgroup>
+
+            <optgroup label="3D Charts">
+              <option value="3d">3D Chart</option>
+            </optgroup>
           </select>
         </div>
 
-        {/* Chart Display */}
-        {xKey && yKey ? (
-          chartType === "bar" ? (
-            <Bar data={chartData} />
+        {/* Unified Chart Card */}
+        <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+          {xKey && yKey ? (
+            chartType === "3d" ? (
+              <ThreeDChartWrapper data={data} xKey={xKey} yKey={yKey} />
+            ) : chartType === "donut" ? (
+              <>
+                <h3 className="text-lg font-bold mb-2">Dough</h3>
+            
+                <Doughnut data={chartData} />
+              </>
+            ) : chartType === "bar" ? (
+              <Bar data={chartData} />
+            ) : (
+              <Line data={chartData} />
+            )
           ) : (
-            <Line data={chartData} />
-          )
-        ) : (
-          <p className="text-gray-600">
-            Please select both X and Y axes to display the chart.
-          </p>
-        )}
+            <p className="text-gray-600 text-lg">
+              🔧 Please select both X and Y axes to display the chart.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

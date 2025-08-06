@@ -2,6 +2,8 @@ import { useEffect, useState, useContext } from "react";
 import API from "../../api";
 import Sidebar from "../../components/Sidebar";
 import { AuthContext } from "../../context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -14,7 +16,6 @@ const Dashboard = () => {
   const fetchUploadHistory = async () => {
     try {
       setLoading(true);
-      // setHistory([]);
       setTotalUploads(0);
       setSuccessUploads(0);
       setFailedUploads(0);
@@ -39,9 +40,16 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     try {
       await API.delete(`/upload/${id}`);
-      fetchUploadHistory(); // Refresh after delete
+      toast.success("File deleted successfully", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      fetchUploadHistory(); // Refresh
     } catch (err) {
-      alert("Delete failed");
+      toast.error("Failed to delete file ❌", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       console.error(err);
     }
   };
@@ -54,6 +62,11 @@ const Dashboard = () => {
     link.href = URL.createObjectURL(blob);
     link.download = `${filename.replace(/\.[^/.]+$/, "")}.json`;
     link.click();
+
+    toast.success(`Downloaded "${filename}"`, {
+      position: "top-right",
+      autoClose: 3000,
+    });
   };
 
   useEffect(() => {
@@ -62,6 +75,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex">
+      <ToastContainer />
       <Sidebar />
       <div className="ml-64 p-10 w-screen bg-green-50 min-h-screen">
         <div className="lg:mb-5 bg-white rounded p-5 shadow flex justify-between items-center">
@@ -126,7 +140,9 @@ const Dashboard = () => {
 
                 <div className="flex gap-3">
                   <button
-                    onClick={() => handleDownload(item.filename, item.parsedData)}
+                    onClick={() =>
+                      handleDownload(item.filename, item.parsedData)
+                    }
                     className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer"
                   >
                     Download

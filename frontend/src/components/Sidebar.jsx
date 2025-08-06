@@ -12,12 +12,13 @@ const Sidebar = () => {
         <Link to="/upload" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1 hover:text-green-500">
           <FaUpload /> Upload Files
         </Link>
+         <Link to="/dashboard/charts" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1   hover:text-green-500">
+          <FaChartBar /> Charts Visuals
+        </Link>
         <Link to="/dashboard/history" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1 hover:text-green-500">
           <FaHistory /> File History
         </Link>
-        <Link to="/dashboard/charts" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1   hover:text-green-500">
-          <FaChartBar /> Charts Visuals
-        </Link>
+       
         <Link to="/logout" onClick={() => {
           localStorage.removeItem("role");
           localStorage.removeItem("token");
