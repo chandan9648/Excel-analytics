@@ -1,18 +1,21 @@
 import { useState } from "react";
 import axios from "axios";
-import { Upload, FileText, Trash2 } from "lucide-react";
+import { Upload, FileText, Trash2, Eye } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const UploadForm = () => {
   const [file, setFile] = useState(null);
   const [excelData, setExcelData] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [showTable, setShowTable] = useState(false);
 
   const handleFileSelect = (e) => {
     setFile(e.target.files[0]);
   };
 
   const handleUpload = async () => {
-    if (!file) return alert("Please select a file.");
+    if (!file) return toast.error("Please select a file");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -28,9 +31,21 @@ const UploadForm = () => {
 
       const parsedData = res.data.data;
       setExcelData(parsedData || []);
+      setShowTable(false);
+
+      toast.success("File uploaded successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "light",
+      });
+
     } catch (err) {
       console.error("Error uploading:", err);
-      alert(err.response?.data?.message || "Upload failed");
+      toast.error(err.response?.data?.message || "Upload failed", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } finally {
       setUploading(false);
     }
@@ -39,10 +54,13 @@ const UploadForm = () => {
   const handleDelete = () => {
     setFile(null);
     setExcelData([]);
+    setShowTable(false);
   };
 
   return (
-    <div className="min-h-screen bg-green-50 flex items-start justify-start p-8">
+    <div className="min-h-screen bg-green-50 flex items-start justify-start p-8 relative">
+      <ToastContainer />
+
       <div className="w-full bg-white rounded-lg shadow-md p-8 max-w-5xl mx-auto">
         <h2 className="text-2xl font-bold text-center mb-4 text-green-700">Upload Excel Files</h2>
         <p className="text-center text-gray-600 mb-8">
@@ -74,9 +92,20 @@ const UploadForm = () => {
                 <FileText className="w-4 h-4" />
                 {file.name}
               </span>
-              <button onClick={handleDelete} className="text-red-500 hover:text-red-700">
-                <Trash2 className="w-5 h-5" />
-              </button>
+
+              <div className="flex items-center gap-3">
+                {excelData.length > 0 && (
+                  <button
+                    onClick={() => setShowTable(!showTable)}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    <Eye className="w-5 h-5" />
+                  </button>
+                )}
+                <button onClick={handleDelete} className="text-red-500 hover:text-red-700">
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -94,8 +123,8 @@ const UploadForm = () => {
           </div>
         )}
 
-        {/* Table View */}
-        {excelData.length > 0 && (
+        {/* Table preview */}
+        {showTable && excelData.length > 0 && (
           <div className="mt-10 overflow-x-auto">
             <h3 className="text-xl font-semibold mb-4 text-green-800">Uploaded Data Preview</h3>
             <table className="w-full border-collapse border border-gray-300 text-sm">
