@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../../api";
 import Sidebar from "../../components/Sidebar";
 import { Search } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const HistoryPage = () => {
   const [uploads, setUploads] = useState([]);
@@ -12,7 +13,7 @@ const HistoryPage = () => {
   // Fetch upload history from backend
   const fetchHistory = async () => {
     try {
-      const res = await API.get("/upload/mine");
+      const res = await API.get("/upload/history");
       setUploads(res.data);
       setFilteredUploads(res.data);
     } catch (err) {
@@ -34,8 +35,7 @@ const HistoryPage = () => {
 
     const filtered = uploads.filter((file) => {
       const originalName = file.filename || "";
-      const nameWithoutExt = originalName.toLowerCase().replace(/\.[^/.]+$/, ""); // remove extension
-      return nameWithoutExt.includes(value);
+      return originalName.toLowerCase().includes(value);
     });
 
     setFilteredUploads(filtered);
@@ -97,14 +97,27 @@ const HistoryPage = () => {
           )}
         </div>
 
-        {/* File Data Visualization Placeholder */}
+        {/* File Data Visualization */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-center text-green-700 mb-4">
             File Data Visualization
           </h2>
           <div className="h-64 flex items-center justify-center border rounded border-dashed border-gray-300">
-            {/* This is a placeholder – replace with actual chart later */}
-            <p className="text-gray-400">[ Chart Placeholder ]</p>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={uploads.length > 0 ? [
+                  { name: 'Success', value: uploads.filter(u => u.status === 'success').length },
+                  { name: 'Fail', value: uploads.filter(u => u.status === 'fail').length },
+                ] : []}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              >
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#22c55e" name="Uploads" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
