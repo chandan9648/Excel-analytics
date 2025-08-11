@@ -104,6 +104,7 @@ const Charts = () => {
               <option key={key} value={key}>
                 {key}
               </option>
+    
             ))}
           </select>
 
@@ -132,7 +133,7 @@ const Charts = () => {
               <ThreeDChartWrapper data={data} xKey={xKey} yKey={yKey} />
             ) : chartType === "donut" ? (
               <>
-                <h3 className="text-lg font-bold mb-2">Dough</h3>
+                <h3 className="text-lg font-bold mb-2">Donut </h3>
             
                 <Doughnut data={chartData} />
               </>

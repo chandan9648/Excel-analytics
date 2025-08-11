@@ -20,16 +20,16 @@ const ProtectedRoute = ({ children }) => {
 
 //  App
 function App() {
-  const { loading } = useContext(AuthContext); 
+  // const { loading } = useContext(AuthContext); 
   const [role, setRole] = useState(localStorage.getItem("role") || "");
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen text-lg text-gray-700">
-        Checking authentication...
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen text-lg text-gray-700">
+  //       Checking authentication...
+  //     </div>
+  //   );
+  // }
 
   return (
     <BrowserRouter>

@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import x from "../assets/x.png";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user} = useContext(AuthContext);
   const location = useLocation();
 
   // Hide navbar on certain routes (optional)
@@ -40,15 +40,7 @@ const Navbar = () => {
               <b>Signup</b>
             </Link>
           </>
-        ) : <button
-            onClick={() => {
-              localStorage.removeItem("token");
-              window.location.href = "/login";
-            }}
-            className="text-lg hover:underline bg-linear-to-r/hsl from-indigo-500 to-blue-400 rounded-xl  px-4 py-2 text-white"
-          >
-            <b>Logout</b>
-          </button> }
+        ) : null} 
       </div>
     </nav>
   );

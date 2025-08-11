@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import { AuthContext } from "../../context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SuccessFailPieChart from "../../components/SuccessFailPieChart";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -111,54 +112,64 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Upload History */}
-        <h3 className="text-xl text-green-700 mb-4">Recent Uploads</h3>
-        {history.length === 0 ? (
-          <p className="text-gray-500">No uploads found.</p>
-        ) : (
-          <ul className="space-y-3">
-            {history.map((item, i) => (
-              <li
-                key={i}
-                className="bg-white p-4 rounded shadow flex justify-between items-center"
-              >
-                <div>
-                  <p className="font-medium">{item.filename}</p>
-                  <p className="text-sm text-gray-500">
-                    {new Date(item.createdAt).toLocaleString()} •{" "}
-                    <span
-                      className={
-                        item.status === "success"
-                          ? "text-green-600"
-                          : "text-red-500"
-                      }
-                    >
-                      {item.status}
-                    </span>
-                  </p>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() =>
-                      handleDownload(item.filename, item.parsedData)
-                    }
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer"
+        {/* Upload History and Pie Chart Side by Side */}
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <div className="flex-1 w-full">
+            <h3 className="text-xl text-green-700 mb-4">Recent Uploads</h3>
+            {history.length === 0 ? (
+              <p className="text-gray-500">No uploads found.</p>
+            ) : (
+              <ul className="space-y-3">
+                {history.map((item, i) => (
+                  <li
+                    key={i}
+                    className="bg-white p-4 rounded shadow flex justify-between items-center"
                   >
-                    Download
-                  </button>
+                    <div>
+                      <p className="font-medium">{item.filename}</p>
+                      <p className="text-sm text-gray-500">
+                        {new Date(item.createdAt).toLocaleString()} •{" "}
+                        <span
+                          className={
+                            item.status === "success"
+                              ? "text-green-600"
+                              : "text-red-500"
+                          }
+                        >
+                          {item.status}
+                        </span>
+                      </p>
+                    </div>
 
-                  <button
-                    onClick={() => handleDelete(item._id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() =>
+                          handleDownload(item.filename, item.parsedData)
+                        }
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer"
+                      >
+                        Download
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(item._id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="w-full lg:w-1/3 bg-white p-5 shadow rounded flex flex-col items-center justify-center mt-8 lg:mt-0">
+            <h3 className="text-xl text-green-700 mb-2">Success vs Fail Rate</h3>
+            <div className="w-full flex justify-center">
+              <SuccessFailPieChart success={successUploads} fail={failedUploads} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

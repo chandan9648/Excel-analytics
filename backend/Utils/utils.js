@@ -7,8 +7,3 @@ export const handleSubmit = (msg) =>{
 }
 
 
-// export const handleChange = (msg) =>{
-//     toast.error(msg, {
-//         position: 'top-right'
-//     })
-// }
