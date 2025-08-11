@@ -117,11 +117,18 @@ const Charts = () => {
               <option value="bar">Bar Chart</option>
               <option value="line">Line Chart</option>
               <option value="digital">Digital Signal</option>
+              <option value="pie">Pie Chart</option>
+              <option value="scatter">Scatter Chart</option>
               <option value="donut">Donut Chart</option>
             </optgroup>
 
             <optgroup label="3D Charts">
-              <option value="3d">3D Chart</option>
+              <option value="3d">3D Line Chart</option>
+              <option value="3d-digital">3D Digital Signal</option>
+              <option value="3d-bar">3D Bar Chart</option>
+              <option value="3d-donut">3D Donut Chart</option>
+              <option value="3d-surface">3D Surface Chart</option>
+              <option value="3d-pie">3D Pie Chart</option>
             </optgroup>
           </select>
         </div>
