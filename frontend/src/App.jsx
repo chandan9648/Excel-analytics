@@ -10,6 +10,8 @@ import UploadPage from "./pages/DashBoard/UploadPage";
 import Nav from "./components/Navbar";
 import HistoryPage from "./pages/DashBoard/HistoryPage";
 import Charts from "./pages/DashBoard/Charts"
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 //  Protected Route
 const ProtectedRoute = ({ children }) => {
@@ -20,39 +22,39 @@ const ProtectedRoute = ({ children }) => {
 
 //  App
 function App() {
-  // const { loading } = useContext(AuthContext); 
   const [role, setRole] = useState(localStorage.getItem("role") || "");
-
-  // if (loading) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen text-lg text-gray-700">
-  //       Checking authentication...
-  //     </div>
-  //   );
-  // }
 
   return (
     <BrowserRouter>
       <Nav />
       <Routes>
+      {/* auth route */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login setRole={setRole} />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+     {/* upload Route*/}
         <Route path="/upload" element={
           <ProtectedRoute>
             <UploadPage />
           </ProtectedRoute>}
            />
+
+     {/* dashboard route */}
         <Route path="/dashboard/upload" element={
           <ProtectedRoute>
             <UploadPage />
           </ProtectedRoute>} 
           />
+
         <Route path="/dashboard/history" element={
           <ProtectedRoute>
             <HistoryPage />
           </ProtectedRoute>}
            />
+
         <Route path="/dashboard/charts"
               element={
                 <ProtectedRoute>
@@ -60,7 +62,7 @@ function App() {
                 </ProtectedRoute>
                }
               />
-
+     {/* usere || admin route */}
         <Route path="/admin" element={role === "admin" ? <AdminPanel /> : <Navigate to="/login" />} />
         <Route
           path="/dashboard"

@@ -70,9 +70,18 @@ const Dashboard = () => {
     });
   };
 
+
+  // Fetch upload history on mount, and clear all data if user logs out
   useEffect(() => {
-    fetchUploadHistory();
-  }, []);
+    if (user) {
+      fetchUploadHistory();
+    } else {
+      setTotalUploads(0);
+      setSuccessUploads(0);
+      setFailedUploads(0);
+      setHistory([]);
+    }
+  }, [user]);
 
   return (
     <div className="flex">

@@ -79,6 +79,11 @@ const Login = ({ setRole }) => {
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
+        <p className="mb-3 text-sm text-left">
+         <Link to="/forgot-password" className="text-blue-500 cursor-pointer">
+          Forgot Password?
+           </Link>
+        </p>
 
         <button
           type="submit"

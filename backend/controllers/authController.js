@@ -1,6 +1,8 @@
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import sgMail from "@sendgrid/mail";
+import crypto from "crypto";
 
 
 // signup 
@@ -107,10 +109,58 @@ export const login = async (req, res) => {
 
 
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+// FORGOT PASSWORD
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
+    const token = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = token;
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 mins
+    await user.save();
 
+    const resetURL = `http://localhost:5000/api/auth/reset-password/${token}`;
 
+    const msg = {
+      to: user.email,
+      from: "chandankkumar156@gmail.com", /*sendgrid verified email.*/
+      subject: "Password Reset Request",
+      html: `<p>Click <a href="${resetURL}">here</a> to reset your password. This link expires in 15 minutes.</p>`,
+    };
 
+    await sgMail.send(msg);
+    res.json({ message: "Reset link sent to email" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error sending reset email" });
+  }
+};
 
+// RESET PASSWORD
+export const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
 
+    if (!user) return res.status(400).json({ message: "Invalid or expired token" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    res.json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error resetting password" });
+  }
+};
