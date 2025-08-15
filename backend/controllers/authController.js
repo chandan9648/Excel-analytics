@@ -39,7 +39,7 @@ export const signup = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '1h' }
     );
 
 
@@ -88,7 +88,7 @@ export const login = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '1h' }
     );
 
     return res.json({
@@ -123,7 +123,7 @@ export const forgotPassword = async (req, res) => {
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 mins
     await user.save();
 
-    const resetURL = `http://localhost:5000/api/auth/reset-password/${token}`;
+    const resetURL =`http://localhost:5173/reset-password/${token}`;
 
     const msg = {
       to: user.email,
