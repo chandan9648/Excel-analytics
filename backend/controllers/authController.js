@@ -108,7 +108,7 @@ export const login = async (req, res) => {
 };
 
 
-
+// sendgrid mail
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Forgot Password
@@ -151,8 +151,8 @@ export const resetPassword = async (req, res) => {
 
     if (!user) return res.status(400).json({ message: "Invalid or expired token" });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    user.password = hashedPassword;
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
