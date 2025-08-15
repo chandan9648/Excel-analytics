@@ -111,7 +111,7 @@ export const login = async (req, res) => {
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// FORGOT PASSWORD
+// Forgot Password
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
@@ -123,11 +123,10 @@ export const forgotPassword = async (req, res) => {
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 mins
     await user.save();
 
-    const resetURL =`http://localhost:5173/reset-password/${token}`;
-
+    const resetURL =`${process.env.CLIENT_URL}/reset-password/${token}`;
     const msg = {
       to: user.email,
-      from: "chandankkumar156@gmail.com", /*sendgrid verified email.*/
+      from: process.env.FROM_EMAIL,
       subject: "Password Reset Request",
       html: `<p>Click <a href="${resetURL}">here</a> to reset your password. This link expires in 15 minutes.</p>`,
     };
@@ -140,7 +139,7 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
-// RESET PASSWORD
+// Reset Password
 export const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;

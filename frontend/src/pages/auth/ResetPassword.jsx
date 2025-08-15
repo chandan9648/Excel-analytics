@@ -7,6 +7,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 export default function ResetPassword() {
   const { token } = useParams();
+  console.log(token);
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,11 +26,11 @@ export default function ResetPassword() {
     }
 
     try {
-      const res = await axios.post(
+      const res = await axios.put(
         `http://localhost:5000/api/auth/reset-password/${token}`,
         { password }
       );
-
+      
       toast.success(res.data.message || "Password updated successfully ✅", {
         position: "top-right",
         autoClose: 3000,

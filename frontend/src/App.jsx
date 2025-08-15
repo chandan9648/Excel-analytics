@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+  import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { useContext, useState } from "react";
 import {  AuthContext } from "./context/AuthContext";
 import Signup from "./pages/auth/Signup";
@@ -32,6 +32,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login setRole={setRole} />} />
         <Route path="/signup" element={<Signup />} />
+        
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
