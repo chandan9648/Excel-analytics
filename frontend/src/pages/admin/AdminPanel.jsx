@@ -145,7 +145,8 @@ const AdminPanel = () => {
           <div className="col-span-2 bg-green-100 rounded-xl p-4 shadow">
             <h2 className="font-semibold mb-4">USER INFO</h2>
             <div className="space-y-3">
-              {users.map((user) => (
+              {users.filter((user)=> user.email !== "chandankkumar156@gmail.com")
+              .map((user) => (
                 <div
                   key={user._id}
                   className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm"
