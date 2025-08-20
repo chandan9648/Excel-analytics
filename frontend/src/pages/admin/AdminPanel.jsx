@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { FaUser, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
@@ -26,18 +21,17 @@ const AdminPanel = () => {
       const token = sessionStorage.getItem("token");
       const res = await fetch("http://localhost:5000/api/admin/users", {
         headers: {
-           "Authorization": `Bearer ${token}`, // 🔑 header bhejo
-        "Content-Type": "application/json",
-        }
+          Authorization: `Bearer ${token}`, // 🔑 header bhejo
+          "Content-Type": "application/json",
+        },
       });
 
-      if(!res){
+      if (!res) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
 
       const data = await res.json();
       setUsers(data);
-
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -45,23 +39,23 @@ const AdminPanel = () => {
 
   const handleDelete = async (id) => {
     try {
-        const token = sessionStorage.getItem("token"); // 🔑 token uthao
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/admin/users/${id}`, {
         method: "DELETE",
         headers: {
-            "Authorization": `Bearer ${token}`,  // ✅ header bhejna zaruri hai
-        "Content-Type": "application/json",
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
 
-      if(!res.ok){
-         throw new Error(`Failed! Status: ${res.status}`);
+      if (!res.ok) {
+        throw new Error(`Failed! Status: ${res.status}`);
       }
       setUsers(users.filter((u) => u._id !== id));
-      toast.success("User deleted Successfully")
+      toast.success("User deleted Successfully");
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete User!")
+      toast.error("Failed to delete User!");
     }
   };
 
@@ -128,9 +122,7 @@ const AdminPanel = () => {
       <div className="flex-1 p-6 overflow-y-auto">
         {/* Top Header */}
         <div className="flex justify-between items-center mb-6 bg-green-100 p-4 rounded-lg shadow">
-          <h1 className="text-xl font-semibold">
-            Welcome back, Admin! 👋
-          </h1>
+          <h1 className="text-xl font-semibold">Welcome back, Admin! 👋</h1>
           <button
             onClick={refresh}
             className="px-4 py-2 bg-green-700 text-white rounded-lg shadow hover:bg-green-600 cursor-pointer"
@@ -138,37 +130,38 @@ const AdminPanel = () => {
             {refreshing ? "Refreshing..." : "Refresh"}
           </button>
         </div>
- 
+
         {/* User Info + Chart */}
         <div className="grid grid-cols-3 gap-6">
           {/* User Info */}
           <div className="col-span-2 bg-green-100 rounded-xl p-4 shadow">
             <h2 className="font-semibold mb-4">USER INFO</h2>
             <div className="space-y-3">
-              {users.filter((user)=> user.email !== "chandankkumar156@gmail.com")
-              .map((user) => (
-                <div
-                  key={user._id}
-                  className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm"
-                >
-                  <div className="flex items-center space-x-3">
-                    <FaUser className="text-green-700" />
-                    <div>
-                      <p className="font-medium">{user.name}</p>
-                      <p className="text-sm text-gray-600">{user.email}</p>
-                      <p className="text-xs text-gray-500">
-                        Total files: {user.totalFiles || 0}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleDelete(user._id)}
-                    className="text-red-600 hover:text-red-800 cursor-pointer"
+              {users
+                .filter((user) => user.email !== "chandankkumar156@gmail.com")
+                .map((user) => (
+                  <div
+                    key={user._id}
+                    className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm"
                   >
-                    <FaTrash />
-                  </button>
-                </div>
-              ))}
+                    <div className="flex items-center space-x-3">
+                      <FaUser className="text-green-700" />
+                      <div>
+                        <p className="font-medium">{user.name}</p>
+                        <p className="text-sm text-gray-600">{user.email}</p>
+                        <p className="text-xs text-gray-500">
+                          Total files: {user.totalFiles || 0}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleDelete(user._id)}
+                      className="text-red-600 hover:text-red-800 cursor-pointer"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                ))}
             </div>
           </div>
 
@@ -177,14 +170,31 @@ const AdminPanel = () => {
             <h2 className="font-semibold mb-4 text-center">
               User Uploads Pie Chart
             </h2>
-            <Pie data={pieData} />
+            <Pie
+              key={JSON.stringify(users)}
+              data={pieData}
+              options={{
+                responsive: true,
+                plugins: {
+                  labels: {
+                    position: "top",
+                    labels: {
+                      boxWidth: 20,
+                      padding: 15,
+                    },
+                  },
+                  title: {
+                    display: false,
+                  },
+                },
+              }}
+            />
           </div>
         </div>
       </div>
-         {/* ✅ Toast Container inside AdminPanel */}
+      {/* ✅ Toast Container inside AdminPanel */}
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
-    
   );
 };
 
