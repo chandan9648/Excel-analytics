@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaHome, FaUpload, FaHistory, FaChartBar, FaSignOutAlt } from "react-icons/fa";
+  import { FaHome, FaUpload, FaHistory, FaChartBar, FaSignOutAlt } from "react-icons/fa";
 
 const Sidebar = () => {
   return (

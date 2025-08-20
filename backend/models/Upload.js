@@ -14,6 +14,10 @@ const uploadSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  user: {
+  type: mongoose.Schema.Types.ObjectId, ref: "User"
+  },
+
   status: {
     type: String,
     enum: ["success", "fail"],

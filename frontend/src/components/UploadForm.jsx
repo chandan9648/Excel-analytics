@@ -115,7 +115,7 @@ const UploadForm = () => {
           <div className="text-center mt-6">
             <button
               onClick={handleUpload}
-              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-green-700 transition cursor-pointer"
               disabled={uploading}
             >
               {uploading ? "Uploading..." : "Upload Files"}
