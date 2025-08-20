@@ -45,9 +45,18 @@ const AdminPanel = () => {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/users/${id}`, {
+        const token = sessionStorage.getItem("token"); // 🔑 token uthao
+      const res = await fetch(`http://localhost:5000/api/admin/users/${id}`, {
         method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`,  // ✅ header bhejna zaruri hai
+        "Content-Type": "application/json",
+        }
       });
+
+      if(!res.ok){
+         throw new Error(`Failed! Status: ${res.status}`);
+      }
       setUsers(users.filter((u) => u._id !== id));
       toast.success("User deleted Successfully")
     } catch (err) {
