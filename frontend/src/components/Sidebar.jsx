@@ -26,13 +26,13 @@ const Sidebar = () => {
           <FaCog /> Account Settings
         </Link>
         
-
+    
 
         <Link to="/logout" onClick={() => {
           localStorage.removeItem("role");
           localStorage.removeItem("token");
           window.location.href = "/login";
-  }} className="flex items-center gap-2 hover:text-red-500  bg-green-50 rounded-2xl justify-center p-1 mt-60">
+            }} className="flex items-center gap-2 hover:text-red-500  bg-green-50 rounded-2xl justify-center p-1 mt-60">
           <FaSignOutAlt /> Logout
         </Link>
       </nav>
