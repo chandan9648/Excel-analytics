@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-  import { FaHome, FaUpload, FaHistory, FaChartBar, FaSignOutAlt } from "react-icons/fa";
+  import { FaHome, FaUpload, FaHistory, FaChartBar, FaSignOutAlt, FaComment } from "react-icons/fa";
 
 const Sidebar = () => {
   return (
@@ -18,7 +18,12 @@ const Sidebar = () => {
         <Link to="/dashboard/history" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1 hover:text-green-500">
           <FaHistory /> File History
         </Link>
-       
+        <Link to="/dashboard/insight" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1 hover:text-green-500">
+          <FaComment /> Smart Insight
+        </Link>
+
+
+
         <Link to="/logout" onClick={() => {
           localStorage.removeItem("role");
           localStorage.removeItem("token");

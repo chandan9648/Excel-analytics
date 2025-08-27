@@ -12,6 +12,7 @@ import HistoryPage from "./pages/DashBoard/HistoryPage";
 import Charts from "./pages/DashBoard/Charts"
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
+import SmartInsight from "./pages/DashBoard/SmartInsight";
 
 //  Protected Route
 const ProtectedRoute = ({ children }) => {
@@ -60,6 +61,20 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Charts />
+                </ProtectedRoute>
+               }
+              />
+        <Route path="/dashboard/insight"
+              element={
+                <ProtectedRoute>
+                  <SmartInsight />
+                </ProtectedRoute>
+               }
+              />
+        <Route path="/smart-insight"
+              element={
+                <ProtectedRoute>
+                  <SmartInsight />
                 </ProtectedRoute>
                }
               />

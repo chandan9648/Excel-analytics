@@ -1,0 +1,80 @@
+import { useEffect, useState } from "react";
+import Sidebar from "../../components/Sidebar";
+import API from "../../api";
+
+const SmartInsight = () => {
+  const [uploads, setUploads] = useState([]);
+  const [selectedId, setSelectedId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState("");
+
+  useEffect(() => {
+    const fetchUploads = async () => {
+      try {
+        const res = await API.get("/upload/history");
+        setUploads(res.data || []);
+        if (res.data?.length) setSelectedId(res.data[0]._id);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchUploads();
+  }, []);
+
+  const getInsight = async () => {
+    if (!selectedId) return;
+    try {
+      setLoading(true);
+      setSummary("");
+      const res = await API.get(`/insights/${selectedId}`);
+      setSummary(res.data?.summary || "No summary available.");
+    } catch (e) {
+      console.error(e);
+      setSummary("Failed to fetch insight.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex bg-green-100 min-h-screen">
+      <Sidebar />
+      <div className="ml-64 w-full px-8 py-10">
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-green-700 mb-6">
+            Smart Analysis
+          </h2>
+
+          <div className="flex items-center gap-3 mb-4">
+            <label className="text-gray-700">Choose an uploaded file:</label>
+            <select
+              value={selectedId}
+              onChange={(e) => setSelectedId(e.target.value)}
+              className="flex-1 border border-green-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-green-400"
+            >
+              {uploads.map((u) => (
+                <option key={u._id} value={u._id}>
+                  {u.filename}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={getInsight}
+              disabled={!selectedId || loading}
+              className="bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white px-4 py-2 rounded"
+            >
+              {loading ? "Loading..." : "Get Insight"}
+            </button>
+          </div>
+
+          <div className="border rounded p-4 bg-green-50">
+            <h3 className="font-semibold text-green-900 mb-2">Insight Summary</h3>
+            <p className="text-gray-800 whitespace-pre-wrap">{summary || "Select a file and click Get Insight."}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SmartInsight;

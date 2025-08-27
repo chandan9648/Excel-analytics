@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
+import insightRoutes from "./routes/insightRoutes.js";
 
 // Load to env bars
 dotenv.config();
@@ -25,6 +26,7 @@ app.use("/api/auth", authRoutes);  /*route for signup/login*/
 app.use("/api", uploadRoutes);  /*route for upload */
 
 app.use("/api/admin", adminRoutes)
+app.use("/api", insightRoutes);
 
  // Connect to MongoDB
 const PORT = process.env.PORT || 5000;
