@@ -1,4 +1,4 @@
-  import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { useContext, useState } from "react";
 import {  AuthContext } from "./context/AuthContext";
 import Signup from "./pages/auth/Signup";
@@ -13,6 +13,7 @@ import Charts from "./pages/DashBoard/Charts"
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import SmartInsight from "./pages/DashBoard/SmartInsight";
+import AccountSettings from "./pages/DashBoard/AccountSettings";
 
 //  Protected Route
 const ProtectedRoute = ({ children }) => {
@@ -75,6 +76,13 @@ function App() {
               element={
                 <ProtectedRoute>
                   <SmartInsight />
+                </ProtectedRoute>
+               }
+              />
+        <Route path="/account-settings"
+              element={
+                <ProtectedRoute>
+                  <AccountSettings />
                 </ProtectedRoute>
                }
               />

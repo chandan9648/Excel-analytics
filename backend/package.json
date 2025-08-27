@@ -21,6 +21,7 @@
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.16.2",
     "multer": "^2.0.2",
+    "openai": "^4.60.1",
     "react-toastify": "^11.0.5",
     "xlsx": "^0.18.5"
   }

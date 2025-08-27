@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-  import { FaHome, FaUpload, FaHistory, FaChartBar, FaSignOutAlt, FaComment } from "react-icons/fa";
+  import { FaHome, FaUpload, FaHistory, FaChartBar, FaSignOutAlt, FaComment, FaCog } from "react-icons/fa";
 
 const Sidebar = () => {
   return (
@@ -13,22 +13,26 @@ const Sidebar = () => {
           <FaUpload /> Upload Files
         </Link>
          <Link to="/dashboard/charts" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1   hover:text-green-500">
-          <FaChartBar /> Charts Visuals
+          <FaChartBar />Visualization
         </Link>
         <Link to="/dashboard/history" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1 hover:text-green-500">
           <FaHistory /> File History
         </Link>
         <Link to="/dashboard/insight" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1 hover:text-green-500">
-          <FaComment /> Smart Insight
+          <FaComment /> Smart Analysis
         </Link>
 
+        <Link to="/account-settings" className="flex items-center gap-2  bg-green-50 rounded-2xl justify-center p-1 hover:text-green-500">
+          <FaCog /> Account Settings
+        </Link>
+        
 
 
         <Link to="/logout" onClick={() => {
           localStorage.removeItem("role");
           localStorage.removeItem("token");
           window.location.href = "/login";
-        }} className="flex items-center gap-2 hover:text-red-500  bg-green-50 rounded-2xl justify-center p-1 mt-80">
+  }} className="flex items-center gap-2 hover:text-red-500  bg-green-50 rounded-2xl justify-center p-1 mt-60">
           <FaSignOutAlt /> Logout
         </Link>
       </nav>

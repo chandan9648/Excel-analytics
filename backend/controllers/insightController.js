@@ -1,4 +1,6 @@
 import Upload from "../models/Upload.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Utility: basic stats for numeric columns
 const computeColumnStats = (rows, key) => {
@@ -60,7 +62,7 @@ export const getInsightSummary = async (req, res) => {
       }
     }
 
-    // Build a simple human-readable summary
+  // Build a simple human-readable summary
     const numericCols = Object.keys(metrics);
     let bullets = [];
     if (yearsSpanText) bullets.push(`Temporal context: ${yearsSpanText}`);
@@ -91,15 +93,50 @@ export const getInsightSummary = async (req, res) => {
       bullets.push("No numeric columns were detected for statistical analysis.");
     }
 
-    const summaryText = `Based on the dataset '${upload.filename}', here are a few highlights: ${bullets
+  let summaryText = `Based on the dataset '${upload.filename}', here are a few highlights: ${bullets
       .map((b, i) => `${i + 1}. ${b}`)
       .join(" ")}`;
+  let summarySource = "rule-based";
+  let modelUsed = null;
+
+  // If OpenAI is configured, ask it to write a concise, user-friendly summary
+  if (process.env.OPENAI_API_KEY) {
+      try {
+    const { default: OpenAI } = await import("openai");
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+        const prompt = `You are a data analyst. Given the following column statistics and optional time span, write a concise, clear, user-friendly insight summary in 3-6 sentences. Avoid hallucinating columns.
+
+Years: ${yearsSpanText || "N/A"}
+Row count: ${rows.length}
+Metrics (JSON): ${JSON.stringify(metrics)}
+`;
+        modelUsed = process.env.OPENAI_MODEL || "gpt-4o-mini";
+        const completion = await openai.chat.completions.create({
+          model: modelUsed,
+          messages: [
+            { role: "system", content: "You write brief, neutral data insights." },
+            { role: "user", content: prompt },
+          ],
+          temperature: 0.4,
+          max_tokens: 250,
+        });
+        const aiText = completion.choices?.[0]?.message?.content?.trim();
+        if (aiText) {
+          summaryText = aiText;
+          summarySource = "openai";
+        }
+      } catch (e) {
+        // If OpenAI fails, keep the basic summary
+      }
+    }
 
     res.json({
       filename: upload.filename,
       metrics,
       summary: summaryText,
       rowCount: rows.length,
+      summarySource,
+      model: modelUsed,
     });
   } catch (err) {
     console.error("Insight error:", err);

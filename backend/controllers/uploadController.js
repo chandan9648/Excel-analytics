@@ -13,6 +13,22 @@ export const uploadExcel = async (req, res) => {
 
     const filePath = path.resolve("uploads", req.file.filename);
 
+    // Prevent duplicate uploads by filename for the same user
+    try {
+      const duplicate = await Upload.findOne({
+        user: req.user?.id || null,
+        filename: req.file.originalname,
+      });
+      if (duplicate) {
+        // Remove the temp file saved by multer
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+        return res.status(409).json({ message: "File already exists" });
+      }
+    } catch (checkErr) {
+      console.error("Duplicate check failed:", checkErr.message);
+      // continue to attempt upload
+    }
+
     // Read Excel and convert to JSON
     const workbook = xlsx.readFile(filePath);
     const sheet = workbook.Sheets[workbook.SheetNames[0]];

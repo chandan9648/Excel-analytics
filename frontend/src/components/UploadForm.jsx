@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Upload, FileText, Trash2, Eye } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 const UploadForm = () => {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [excelData, setExcelData] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -33,16 +35,22 @@ const UploadForm = () => {
       setExcelData(parsedData || []);
       setShowTable(false);
 
-      toast.success("File uploaded successfully!", {
+  toast.success("File uploaded successfully!", {
         position: "top-right",
         autoClose: 3000,
         pauseOnHover: true,
         theme: "light",
       });
 
+  // Redirect to Chart Visualization page after success
+  navigate("/dashboard/charts");
+
     } catch (err) {
       console.error("Error uploading:", err);
-      toast.error(err.response?.data?.message || "Upload failed", {
+      const msg = err.response?.status === 409
+        ? "File already exists"
+        : (err.response?.data?.message || "Upload failed");
+      toast.error(msg, {
         position: "top-right",
         autoClose: 3000,
       });
