@@ -46,11 +46,11 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-500 to-green-500">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-500 to-green-500 px-4">
       <ToastContainer />
       <form
         onSubmit={handleReset}
-        className="bg-white p-8 rounded-lg shadow-lg w-96"
+        className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md"
       >
         <h1 className="text-2xl font-bold mb-2 text-center">Reset Password</h1>
         <h3 className="text-sm mb-6 text-center">Enter your new password</h3>

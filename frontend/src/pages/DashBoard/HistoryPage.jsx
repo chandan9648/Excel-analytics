@@ -7,6 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } fro
 import Modal from "react-modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaBars } from "react-icons/fa";
 
 const HistoryPage = () => {
   // const navigate = useNavigate();
@@ -74,12 +75,19 @@ const HistoryPage = () => {
     }
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content */}
-      <div className="ml-64 w-full bg-green-50 min-h-screen px-8 py-10">
+      <div className="lg:ml-64 w-full bg-green-50 min-h-screen px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+        <div className="lg:hidden flex items-center gap-3 mb-4">
+          <button aria-label="Open Menu" onClick={() => setSidebarOpen(true)} className="p-2 border rounded">
+            <FaBars />
+          </button>
+          <span className="font-semibold">History</span>
+        </div>
         <ToastContainer />
         {/* File History Section */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">

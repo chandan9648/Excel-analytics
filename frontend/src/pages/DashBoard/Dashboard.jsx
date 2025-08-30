@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuccessFailPieChart from "../../components/SuccessFailPieChart";
+import { FaBars } from "react-icons/fa";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -83,11 +84,19 @@ const Dashboard = () => {
     }
   }, [user]);
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex">
       <ToastContainer />
-      <Sidebar />
-      <div className="ml-64 p-10 w-screen bg-green-50 min-h-screen">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="lg:ml-64 p-4 sm:p-6 lg:p-10 w-screen bg-green-50 min-h-screen">
+        {/* Mobile header */}
+        <div className="lg:hidden flex items-center gap-3 mb-4">
+          <button aria-label="Open Menu" onClick={() => setSidebarOpen(true)} className="p-2 border rounded">
+            <FaBars />
+          </button>
+          <span className="font-semibold">Dashboard</span>
+        </div>
         <div className="lg:mb-5 bg-white rounded p-5 shadow flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">

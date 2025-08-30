@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { FaUser, FaTrash } from "react-icons/fa";
+import { FaUser, FaTrash, FaBars } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,6 +13,7 @@ const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [active, setActive] = useState("dashboard"); // 'dashboard' | 'settings'
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Settings form state
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -105,21 +106,31 @@ const AdminPanel = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
+      {/* Mobile overlay */}
+      <div
+        onClick={() => setSidebarOpen(false)}
+        className={`${sidebarOpen ? "fixed" : "hidden"} inset-0 bg-black/40 z-40 lg:hidden`}
+      />
+
       {/* Sidebar */}
-      <div className="w-64 bg-linear-65 from-green-700 to-cyan-800 text-white flex flex-col">
+      <aside
+        className={`fixed top-0 left-0 w-64 h-screen bg-linear-65 from-green-700 to-cyan-800 text-white flex flex-col z-50
+        transform transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        lg:static lg:translate-x-0`}
+      >
         <div className="p-6 font-bold text-2xl text-center">
           Excel Analytics
         </div>
         <nav className="flex-1">
           <ul className="space-y-2">
             <li
-              onClick={() => setActive("dashboard")}
+              onClick={() => { setActive("dashboard"); setSidebarOpen(false); }}
               className={`px-3 py-1 bg-white text-black rounded-4xl m-4 text-center cursor-pointer hover:bg-green-200 ${active === "dashboard" ? "ring-2 ring-green-400" : ""}`}
             >
               Dashboard
             </li>
             <li
-              onClick={() => setActive("settings")}
+              onClick={() => { setActive("settings"); setSidebarOpen(false); }}
               className={`px-3 py-1 bg-white text-black rounded-4xl m-4 text-center cursor-pointer hover:bg-green-200 ${active === "settings" ? "ring-2 ring-green-400" : ""}`}
             >
               Account Settings
@@ -141,10 +152,21 @@ const AdminPanel = () => {
             Logout
           </button>
         </div>
-      </div>
+      </aside>
 
       {/* Main Content */}
       <div className="flex-1 p-6 overflow-y-auto">
+        {/* Mobile top bar */}
+        <div className="lg:hidden flex items-center gap-3 mb-4">
+          <button
+            aria-label="Open menu"
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 border rounded"
+          >
+            <FaBars />
+          </button>
+          <span className="font-semibold">Admin</span>
+        </div>
         {active === "dashboard" ? (
           <>
             {/* Top Header */}
@@ -171,11 +193,11 @@ const AdminPanel = () => {
                         key={user._id}
                         className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm"
                       >
-                        <div className="flex items-center space-x-3">
-                          <FaUser className="text-green-700" />
-                          <div>
-                            <p className="font-medium">{user.name}</p>
-                            <p className="text-sm text-gray-600">{user.email}</p>
+                        <div className="flex items-center space-x-3 min-w-0">
+                          <FaUser className="text-green-700 flex-shrink-0" />
+                          <div className="min-w-0">
+                            <p className="font-medium truncate">{user.name}</p>
+                            <p className="text-sm text-gray-600 truncate">{user.email}</p>
                             <p className="text-xs text-gray-500">
                               Total files: {user.totalFiles || 0}
                             </p>
@@ -183,7 +205,7 @@ const AdminPanel = () => {
                         </div>
                         <button
                           onClick={() => handleDelete(user._id)}
-                          className="text-red-600 hover:text-red-800 cursor-pointer"
+                          className="text-red-600 hover:text-red-800 cursor-pointer flex-shrink-0"
                         >
                           <FaTrash />
                         </button>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import API from "../../api";
+import { FaBars } from "react-icons/fa";
 
 const SmartInsight = () => {
   const [uploads, setUploads] = useState([]);
@@ -41,10 +42,17 @@ const SmartInsight = () => {
     }
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex bg-green-100 min-h-screen">
-      <Sidebar />
-      <div className="ml-64 w-full px-8 py-10">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="lg:ml-64 w-full px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+        <div className="lg:hidden flex items-center gap-3 mb-4">
+          <button aria-label="Open Menu" onClick={() => setSidebarOpen(true)} className="p-2 border rounded">
+            <FaBars />
+          </button>
+          <span className="font-semibold">Smart Analysis</span>
+        </div>
         <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-green-700 mb-6">
             Smart Analysis

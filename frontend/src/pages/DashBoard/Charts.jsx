@@ -15,6 +15,7 @@ import {
 
 import API from "../../api";
 import Sidebar from "../../components/Sidebar";
+import { FaBars } from "react-icons/fa";
 import ThreeDChartWrapper from "./ThreeDChartWrapper";
 
 ChartJS.register(
@@ -39,6 +40,7 @@ const Charts = () => {
   const [xKey, setXKey] = useState("");
   const [yKey, setYKey] = useState("");
   const [chartType, setChartType] = useState("bar");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   // Data Range Analysis removed
 
   useEffect(() => {
@@ -151,9 +153,15 @@ const Charts = () => {
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="ml-64 p-10 w-full">
+      <div className="lg:ml-64 p-4 sm:p-6 lg:p-10 w-full">
+        <div className="lg:hidden flex items-center gap-3 mb-4">
+          <button aria-label="Open Menu" onClick={() => setSidebarOpen(true)} className="p-2 border rounded">
+            <FaBars />
+          </button>
+          <span className="font-semibold">Charts</span>
+        </div>
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Chart Visualization</h2>
 
         {/* Controls */}

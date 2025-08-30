@@ -3,6 +3,7 @@ import Sidebar from "../../components/Sidebar";
 import API from "../../api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaBars } from "react-icons/fa";
 
 const AccountSettings = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -51,10 +52,17 @@ const AccountSettings = () => {
     }
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex bg-green-100 min-h-screen">
-      <Sidebar />
-      <div className="ml-64 w-full p-8">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="lg:ml-64 w-full p-4 sm:p-6 lg:p-8">
+        <div className="lg:hidden flex items-center gap-3 mb-4">
+          <button aria-label="Open Menu" onClick={() => setSidebarOpen(true)} className="p-2 border rounded">
+            <FaBars />
+          </button>
+          <span className="font-semibold">Settings</span>
+        </div>
         <ToastContainer />
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 bg-white rounded-xl shadow p-6">
