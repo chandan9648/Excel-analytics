@@ -34,6 +34,7 @@ ChartJS.register(
 
 const Charts = () => {
   const chartRef = useRef(null);
+  const threeCanvasRef = useRef(null);
   const [uploads, setUploads] = useState([]);
   const [selectedFileId, setSelectedFileId] = useState("");
   const [data, setData] = useState([]);
@@ -137,9 +138,16 @@ const Charts = () => {
 
   const handleDownload = () => {
     try {
-      const chart = chartRef.current;
-      if (!chart) return;
-      const url = chart.toBase64Image();
+      let url = "";
+      if (chartType === "3d") {
+        const canvas = threeCanvasRef.current;
+        if (!canvas) return;
+        url = canvas.toDataURL("image/png");
+      } else {
+        const chart = chartRef.current;
+        if (!chart) return;
+        url = chart.toBase64Image();
+      }
       const a = document.createElement("a");
       const file = uploads.find((f) => f._id === selectedFileId);
       const base = (file?.filename || "chart").replace(/\.[^/.]+$/, "");
@@ -162,7 +170,7 @@ const Charts = () => {
           </button>
           <span className="font-semibold">Charts</span>
         </div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Chart Visualization</h2>
+        <h2 className="text-3xl font-bold text-green-700 mb-6 text-center">Chart Visualization</h2>
 
         {/* Controls */}
         <div className="flex flex-wrap items-end gap-4 mb-6">
@@ -228,7 +236,7 @@ const Charts = () => {
           <button
             onClick={handleDownload}
             disabled={!selectedFileId || !xKey || !yKey}
-            className="ml-auto bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white px-4 py-2 rounded shadow"
+            className="ml-auto bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white px-4 py-2 cursor-pointer rounded shadow"
           >
             ⬇️ Download Chart
           </button>
@@ -238,7 +246,12 @@ const Charts = () => {
         <div className="bg-white p-6 rounded-xl shadow-lg text-center">
       {selectedFileId && xKey && yKey ? (
             chartType === "3d" ? (
-              <ThreeDChartWrapper data={data} xKey={xKey} yKey={yKey} />
+              <ThreeDChartWrapper
+                data={data}
+                xKey={xKey}
+                yKey={yKey}
+                onCanvasReady={(el) => (threeCanvasRef.current = el)}
+              />
             ) : chartType === "donut" ? (
               <>
                 <h3 className="text-lg font-bold mb-2">Donut</h3>
