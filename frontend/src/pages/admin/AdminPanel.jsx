@@ -41,7 +41,7 @@ const AdminPanel = () => {
       const token = sessionStorage.getItem("token");
       const res = await fetch("http://localhost:5000/api/admin/users", {
         headers: {
-          Authorization: `Bearer ${token}`, // 🔑 header bhejo
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });

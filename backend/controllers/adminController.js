@@ -89,7 +89,7 @@ export const getAllUsers = async (req, res) => {
     const counts = await Upload.aggregate([
       { $group: { _id: "$user", totalFiles: { $sum: 1 } } },
     ]);
-    const countMap = Object.fromEntries(counts.map(c => [c._id.toString(), c.totalFiles]));
+    const countMap = Object.fromEntries(counts.filter(c => c._id).map(c => [c._id.toString(), c.totalFiles]));
 
     // Attach last 3 files for each user (lightweight)
     const usersWithCounts = await Promise.all(users.map(async (u) => {

@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid, Text } from "@react-three/drei";
 
 // Restored enhanced 3D column chart (axes + grid + labels)
-const ThreeDChartWrapper = ({ data = [], xKey, yKey }) => {
+const ThreeDChartWrapper = ({ data = [], xKey, yKey, onCanvasReady }) => {
   const barSpacing = 1.1; // compact spacing between bars
   const baseBarWidth = 0.6; // bar thickness
 
@@ -23,7 +23,17 @@ const ThreeDChartWrapper = ({ data = [], xKey, yKey }) => {
 
   return (
     <div className="h-[400px] w-full rounded-xl overflow-hidden shadow bg-white">
-      <Canvas camera={{ position: [8, 7, 12], fov: 50 }}>
+      <Canvas
+        camera={{ position: [8, 7, 12], fov: 50 }}
+        // ensure the canvas can be exported to an image
+        gl={{ antialias: true, preserveDrawingBuffer: true }}
+        onCreated={({ gl }) => {
+          // pass the actual <canvas> element to the parent so it can call toDataURL
+          if (typeof onCanvasReady === "function") {
+            onCanvasReady(gl.domElement);
+          }
+        }}
+      >
         {/* Scene background and lighting */}
         <color attach="background" args={["#0b1220"]} />
         <ambientLight intensity={0.6} />
