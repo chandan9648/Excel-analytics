@@ -147,8 +147,9 @@ const AdminPanel = () => {
               localStorage.removeItem("token");
               window.location.href = "/login";
             }}
-            className={`w-full text-center bg-white text-black  rounded-4xl py-2 mb-5 mt-5 cursor-pointer hover:bg-red-500 ${active === 'logout' ? 'ring-2 ring-red-200' : ''}`}
+            className= "w-full  text-center bg-green-50 text-black rounded-4xl py-2 mb-5 mt-5 cursor-pointer hover:text-red-500 "
           >
+            
             Logout
           </button>
         </div>
