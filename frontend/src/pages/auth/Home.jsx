@@ -21,7 +21,7 @@ const Home = () => {
 
         {/* Right Side: Welcome content */}
   <div className="bg-green-100 p-6 md:p-10 w-full rounded shadow-2xl text-center">
-          <h1 className="text-4xl font-bold mb-5 text-green-800">Excel Analytics Platform</h1>
+          <h1 className="text-3xl font-semibold mb-5 text-black-800">Excel Analytics Platform: upload spreadsheets, transform data into interactive visualizations, and uncover key trends—faster and more efficiently.</h1>
 
         </div>
       </div>

@@ -62,40 +62,97 @@ export const getInsightSummary = async (req, res) => {
       }
     }
 
-  // Build a simple human-readable summary
+  // Build a single-paragraph narrative summary like the provided example
     const numericCols = Object.keys(metrics);
-    let bullets = [];
-    if (yearsSpanText) bullets.push(`Temporal context: ${yearsSpanText}`);
 
-    if (numericCols.length) {
+    // Utilities
+    const fmt = (n, digits = 2) => (Number.isFinite(n) ? Number(n).toLocaleString("en-US", { maximumFractionDigits: digits }) : "N/A");
+    const arrOf = (col) => rows.map((r) => Number(r?.[col])).filter((v) => Number.isFinite(v));
+    const sum = (a) => a.reduce((x, y) => x + y, 0);
+    const pearson = (x, y) => {
+      const n = Math.min(x.length, y.length);
+      if (n < 3) return NaN;
+      const mx = x.reduce((a, b) => a + b, 0) / n;
+      const my = y.reduce((a, b) => a + b, 0) / n;
+      let num = 0, dx = 0, dy = 0;
+      for (let i = 0; i < n; i++) {
+        const vx = x[i] - mx;
+        const vy = y[i] - my;
+        num += vx * vy;
+        dx += vx * vx;
+        dy += vy * vy;
+      }
+      const den = Math.sqrt(dx * dy);
+      return den ? num / den : NaN;
+    };
+
+    // Try to detect business-friendly columns
+    const findCol = (re) => keys.find((k) => re.test(k));
+    const revenueCol = findCol(/revenue|sales?_?(amount|total)?|turnover|total_?revenue|gross_?sales/i);
+    const qtyCol = findCol(/qty|quantity|units?|unit_?sold|pieces|item_?count/i);
+    const priceCol = findCol(/price|unit[_\s-]?price|cost[_\s-]?per[_\s-]?unit|rate/i);
+
+    const revArr = revenueCol ? arrOf(revenueCol) : [];
+    const qtyArr = qtyCol ? arrOf(qtyCol) : [];
+    const totalRevenue = revArr.length ? sum(revArr) : null;
+    const totalQty = qtyArr.length ? sum(qtyArr) : null;
+    const avgPrice = priceCol && metrics[priceCol] ? metrics[priceCol].mean : null;
+
+    // Quantity-Revenue correlation
+    let corrSnippet = null;
+    if (revArr.length && qtyArr.length) {
+      const n = Math.min(revArr.length, qtyArr.length);
+      const r = pearson(revArr.slice(0, n), qtyArr.slice(0, n));
+      if (Number.isFinite(r)) {
+        const strength = Math.abs(r) >= 0.6 ? "strong" : Math.abs(r) >= 0.3 ? "moderate" : "weak";
+        const direction = r >= 0 ? "positive" : "negative";
+        corrSnippet = `The ${qtyCol || "quantity"} shows a ${strength} ${direction} correlation with ${revenueCol || "revenue"} (r = ${fmt(r, 2)}).`;
+      }
+    }
+
+    // Compose 3–5 insights
+    const intro = `Based on the provided summary statistics from the Excel data, we can draw the following insights:`;
+    const insights = [];
+
+    if (totalQty !== null || totalRevenue !== null) {
+      const parts = [];
+      if (totalQty !== null) parts.push(`a total of ${fmt(totalQty)} units sold`);
+      if (totalRevenue !== null) parts.push(`total ${revenueCol || "revenue"} of ${fmt(totalRevenue)}`);
+      const suffix = yearsSpanText ? ` ${yearsSpanText}` : "";
+      insights.push(`1. **Total Performance**: ${parts.join(", ")} were recorded.${suffix}`);
+    }
+
+    if (avgPrice !== null) {
+      const std = metrics[priceCol]?.std;
+      insights.push(`2. **Pricing Analysis**: The average ${priceCol || "price"} is ${fmt(avgPrice)}${Number.isFinite(std) ? ` (σ ≈ ${fmt(std)})` : ""}.`);
+    }
+
+    if (corrSnippet) {
+      insights.push(`3. **Quantity and Revenue Correlation**: ${corrSnippet}`);
+    }
+
+    // Fallbacks from stats if needed
+    if (insights.length < 3 && numericCols.length) {
       const means = numericCols
         .map((k) => ({ k, mean: metrics[k].mean }))
-        .sort((a, b) => b.mean - a.mean);
-      const top = means.slice(0, Math.min(3, means.length));
-      bullets.push(
-        `Top averages: ${top
-          .map((t) => `${t.k}: ${t.mean.toFixed(2)}`)
-          .join(", ")}.`
-      );
-
+        .sort((a, b) => b.mean - a.mean)
+        .slice(0, Math.min(3, numericCols.length));
+      if (means.length) {
+        insights.push(`${insights.length + 1}. **Top Averages**: ${means.map((m) => `${m.k}: ${fmt(m.mean)}`).join(", ")}.`);
+      }
       const variability = numericCols
         .map((k) => ({ k, std: metrics[k].std }))
         .sort((a, b) => b.std - a.std);
-      const mostVariable = variability[0];
-      if (mostVariable) {
-        bullets.push(
-          `Highest variability observed in '${mostVariable.k}' (σ ≈ ${mostVariable.std.toFixed(
-            2
-          )}).`
-        );
+      if (variability[0]) {
+        insights.push(`${insights.length + 1}. **Variability**: Highest variability observed in '${variability[0].k}' (σ ≈ ${fmt(variability[0].std)}).`);
       }
-    } else {
-      bullets.push("No numeric columns were detected for statistical analysis.");
     }
 
-  let summaryText = `Based on the dataset '${upload.filename}', here are a few highlights: ${bullets
-      .map((b, i) => `${i + 1}. ${b}`)
-      .join(" ")}`;
+    if (!insights.length) {
+      insights.push(`1. **Overview**: No strong numeric insights detected.`);
+    }
+
+    let summaryText = `${intro} ${insights.join(" ")}`;
   let summarySource = "rule-based";
   let modelUsed = null;
 
@@ -104,17 +161,18 @@ export const getInsightSummary = async (req, res) => {
       try {
     const { default: OpenAI } = await import("openai");
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-        const prompt = `You are a data analyst. Given the following column statistics and optional time span, write a concise, clear, user-friendly insight summary in 3-6 sentences. Avoid hallucinating columns.
+  const prompt = `You are a data analyst. Write a single-paragraph narrative like this style: \n"Based on the provided summary statistics from the Excel data, we can draw the following insights: 1. **Total Performance**: ... 2. **Pricing Analysis**: ... 3. **Quantity and Revenue Correlation**: ..."\nUse 3–5 numbered insights, each with a short bold title followed by a concise explanation with rounded numbers. Avoid inventing columns. Include time span if present.
 
 Years: ${yearsSpanText || "N/A"}
 Row count: ${rows.length}
+Columns: ${keys.length}
 Metrics (JSON): ${JSON.stringify(metrics)}
 `;
         modelUsed = process.env.OPENAI_MODEL || "gpt-4o-mini";
         const completion = await openai.chat.completions.create({
           model: modelUsed,
           messages: [
-            { role: "system", content: "You write brief, neutral data insights." },
+      { role: "system", content: "You write brief, neutral data insights as a single paragraph with numbered, bold-titled insights." },
             { role: "user", content: prompt },
           ],
           temperature: 0.4,
