@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { FaUser, FaTrash, FaBars } from "react-icons/fa";
+import { FaUser, FaTrash, FaBars, FaHome, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -125,15 +125,17 @@ const AdminPanel = () => {
           <ul className="space-y-2">
             <li
               onClick={() => { setActive("dashboard"); setSidebarOpen(false); }}
-              className={`px-3 py-1 bg-white text-black rounded-4xl m-4 text-center cursor-pointer hover:bg-green-200 ${active === "dashboard" ? "ring-2 ring-green-400" : ""}`}
+              className={`px-3 py-1 bg-white text-black rounded-4xl m-4 text-center cursor-pointer hover:bg-green-200 ${active === "dashboard" ? "ring-2 ring-green-400" : ""} flex items-center justify-center gap-2`}
             >
-              Dashboard
+              <FaHome />
+              <span>Dashboard</span>
             </li>
             <li
               onClick={() => { setActive("settings"); setSidebarOpen(false); }}
-              className={`px-3 py-1 bg-white text-black rounded-4xl m-4 text-center cursor-pointer hover:bg-green-200 ${active === "settings" ? "ring-2 ring-green-400" : ""}`}
+              className={`px-3 py-1 bg-white text-black rounded-4xl m-4 text-center cursor-pointer hover:bg-green-200 ${active === "settings" ? "ring-2 ring-green-400" : ""} flex items-center justify-center gap-2`}
             >
-              Account Settings
+              <FaCog />
+              <span>Account Settings</span>
             </li>
           </ul>
         </nav>
@@ -147,10 +149,10 @@ const AdminPanel = () => {
               localStorage.removeItem("token");
               window.location.href = "/login";
             }}
-            className= "w-full  text-center bg-green-50 text-black rounded-4xl py-2 mb-5 mt-5 cursor-pointer hover:text-red-500 "
+            className= "w-full  text-center bg-green-50 text-black rounded-4xl py-2 mb-5 mt-5 cursor-pointer hover:text-red-500 flex items-center justify-center gap-2"
           >
-            
-            Logout
+            <FaSignOutAlt />
+            <span>Logout</span>
           </button>
         </div>
       </aside>
