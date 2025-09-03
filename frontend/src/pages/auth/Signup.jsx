@@ -23,7 +23,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/auth/signup", data);
+      await axios.post("https://excel-analytics-m5zg.onrender.com/api/auth/signup", data);
       toast.success("Signup successful ✅", {
         position: "top-right",
         autoClose: 3000,

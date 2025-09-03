@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // Or your deployed URL
+  baseURL: "https://excel-analytics-m5zg.onrender.com/api", // Or your deployed URL
 });
 
 API.interceptors.request.use((config) => {
