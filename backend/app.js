@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 
 import authRoutes from "./routes/authRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
@@ -13,8 +14,12 @@ dotenv.config();
 const app = express();
 
 
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173",
+     credentials: true
+}));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 
 // API routes
 app.use("/api/auth", authRoutes);
@@ -22,5 +27,9 @@ app.use("/api", uploadRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", insightRoutes);
 app.use("/api", userRoutes);
+
+app.get("*name", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 export default app;
