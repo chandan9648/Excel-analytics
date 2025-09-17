@@ -13,7 +13,7 @@ const app = express();
 
 
 app.use(cors({
-    origin: "localhost:5173",
+    origin: "https://excel-analytics-2004.netlify.app",
     credentials: true
 }));
 app.use(express.json());
