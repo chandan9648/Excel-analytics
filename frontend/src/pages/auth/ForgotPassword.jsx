@@ -10,7 +10,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://excel-analytics-m5zg.onrender.com/api/auth/forgot-password", { email });
+      const res = await axios.post("https://excel-analytics-platform-z594.onrender.com/api/auth/forgot-password", { email });
       toast.success(res.data.message || "Reset link sent ✅", {
         position: "top-right",
         autoClose: 3000,
