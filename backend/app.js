@@ -14,7 +14,10 @@ dotenv.config();
 const app = express();
 
 
-app.use(cors());
+app.use(cors({
+    origin: "https://excel-analytics-2004.netlify.app",
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "/public")));
 
