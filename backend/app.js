@@ -13,7 +13,7 @@ const app = express();
 
 
 app.use(cors({
-    origin: "https://excel-analytics-2004.netlify.app",
+    origin: "https://excel-analytics2d3d.vercel.app/",
     credentials: true
 }));
 app.use(express.json());
