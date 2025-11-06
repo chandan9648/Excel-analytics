@@ -20,6 +20,8 @@ Express.js
 
 MongoDB
 
+Redis (caching)
+
 Multer (file upload)
 
 SheetJS / xlsx (Excel parsing)
@@ -64,6 +66,9 @@ BACKEND_HOST_URL=https://excel-analytics-platform-z594.onrender.com
 LIVE_HOST_URL=https://excel-analytics-2004.netlify.app
 LOCALHOST_URL=http://localhost:5000
 OPENAI_API_KEY=your openai api key
+REDIS_HOST=your redis host
+REDIS_PORT=your redis port  
+REDIS_PASSWORD=your redis password
 CLIENT_URL=http://localhost:5173
 
 npm run dev
