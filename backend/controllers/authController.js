@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import sgMail from "@sendgrid/mail";
 import crypto from "crypto";
+import sendEmail from '../email.js';
 
 
 // signup 
@@ -47,6 +48,23 @@ export const signup = async (req, res) => {
       { expiresIn: '1h' }
     );
 
+
+    
+    // ✅ Send welcome email using SendGrid
+    await sendEmail(
+      email,
+      "Welcome to Our Platform 🎉",
+      `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2>Welcome, ${user.name}!</h2>
+        <p>We’re thrilled to have you on board.</p>
+        <p>Explore your account and start using our services today.</p>
+        <p><b>Role:</b> ${user.role}</p>
+        <br/>
+        <p>– The Team</p>
+      </div>
+      `
+    );
 
     return res.status(201).json({
       msg: 'User registered successfully',
