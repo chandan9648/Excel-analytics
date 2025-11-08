@@ -47,7 +47,7 @@ const Login = ({ setRole }) => {
       <ToastContainer />
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md"
+        className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-sm"
       >
         <h1 className="text-2xl font-bold mb-2 text-center">Welcome back!</h1>
         <h3 className="text-sm mb-6 text-center">Login to continue</h3>

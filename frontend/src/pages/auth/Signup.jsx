@@ -43,7 +43,7 @@ const Signup = () => {
       <ToastContainer />
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-md mx-auto"
+        className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-sm  mx-auto"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
 
