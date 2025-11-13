@@ -65,7 +65,7 @@ const Charts = () => {
     if (!selectedFileId) {
       setData([]);
       setXKey("");
-      setYKey("");
+      setYKey(""); 
       return;
     }
     const file = uploads.find((f) => f._id === selectedFileId);
