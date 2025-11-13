@@ -3,7 +3,7 @@ import { Bar, Line, Doughnut, Scatter } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
-  LinearScale,
+  LinearScale, 
   ArcElement,
   BarElement,
   LineElement,
