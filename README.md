@@ -12,22 +12,17 @@ Redux Toolkit
 Chart.js
 Three.js (for 3D charts)
 Tailwind CSS
+
+
 Backend:
 
 Node.js
-
 Express.js
-
-MongoDB
-
+MongoDB(NoSQL)
 Redis (caching)
-
 Multer (file upload)
-
 SheetJS / xlsx (Excel parsing)
-
 JWT (Authentication)
-
 OpenAI API (for AI insights)
 
 🎯 Key Features
@@ -40,6 +35,7 @@ OpenAI API (for AI insights)
 ✅ Downloadable Graphs (PNG/PDF)
 ✅ Admin Dashboard for Managing Users/Files
 ✅ AI Summary (Optional OpenAI integration)
+
 🗂️ Folder Structure
 /backend ├── models/ ├── routes/ ├── middleware/ └── server.js
 
