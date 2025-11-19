@@ -2,7 +2,7 @@
 A full-stack MERN-based web platform for uploading and analyzing Excel files (.xls, .xlsx), visualizing data through interactive 2D/3D charts, and generating downloadable reports. The platform includes user and admin authentication, upload history dashboard, and optional AI-generated insights.
 
 🚀 Live Demo
-COMING SOON
+https://excel-analytics-2004.vercel.app
 
 🧰 Tech Stack
 Frontend:
