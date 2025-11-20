@@ -6,7 +6,7 @@ import crypto from "crypto";
 import sendEmail from '../email.js';
 
 
-// signup 
+// SIGNUP
 export const signup = async (req, res) => {
   
   try {
@@ -50,7 +50,7 @@ export const signup = async (req, res) => {
 
 
     
-    // ✅ Send welcome email using SendGrid
+    //  Send welcome email using SendGrid
     await sendEmail(
       email,
       "Welcome to Our Platform 🎉",
@@ -80,7 +80,7 @@ export const signup = async (req, res) => {
 };
 
 
-// login 
+// LOGIN
 export const login = async (req, res) => {
   try {
     const { email, password} = req.body;
@@ -130,11 +130,10 @@ export const login = async (req, res) => {
   }
 };
 
-
-// sendgrid mail
+// SENDGRID SETUP
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Forgot Password
+// FORGOT PASSWORD
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
