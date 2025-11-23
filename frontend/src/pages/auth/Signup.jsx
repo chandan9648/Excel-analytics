@@ -23,7 +23,10 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      await axios.post("https://excel-analytics-platform-z594.onrender.com/api/auth/signup", data);
+      await axios.post("https://excel-analytics-platform-z594.onrender.com/api/auth/signup", data, {
+          withCredentials: true,
+        }
+      );
       toast.success("Signup successful ✅", {
         position: "top-right",
         autoClose: 3000,

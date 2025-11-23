@@ -18,14 +18,18 @@ const Login = ({ setRole }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://excel-analytics-platform-z594.onrender.com/api/auth/login", data);
+      const res = await axios.post("https://excel-analytics-platform-z594.onrender.com/api/auth/login", data, {
+          withCredentials: true,
+        }
+      );
+      
 
       login(res.data.token);
       setRole(res.data.user.role);
 
       toast.success("Login successful ✅", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
 
       if (res.data.user.role === "admin") {
@@ -37,7 +41,7 @@ const Login = ({ setRole }) => {
       console.error("Login failed:", err.response?.data || err.message);
       toast.error("Invalid credentials ❌", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       }); 
     }
   };
