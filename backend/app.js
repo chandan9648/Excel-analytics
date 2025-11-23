@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: ["hhttps://excel-analytics-2004.vercel.app", "http://localhost:5173"],  
+    origin: ["https://excel-analytics-2004.vercel.app", "http://localhost:5173"],  
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 
