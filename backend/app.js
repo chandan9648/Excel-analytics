@@ -11,9 +11,8 @@ dotenv.config();
 
 const app = express();
 
-
 app.use(cors({
-    origin: ["https://excel-analytics-2004.netlify.app", "http://localhost:5173"],  
+    origin: ["https://excel-analytics-2004.vercel.app", "http://localhost:5173"],  
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 
