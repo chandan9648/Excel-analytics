@@ -39,7 +39,7 @@ const AdminPanel = () => {
   const fetchUsers = async () => {
     try {
       const token = sessionStorage.getItem("token");
-      const res = await fetch("https://excel-analytics-platform-z594.onrender.com/api/admin/users", {
+      const res = await fetch("https://excel-analytics-921i.onrender.com/api/admin/users", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const AdminPanel = () => {
   const handleDelete = async (id) => {
     try {
       const token = sessionStorage.getItem("token");
-      const res = await fetch(`https://excel-analytics-platform-z594.onrender.com/api/admin/users/${id}`, {
+      const res = await fetch(`https://excel-analytics-921i.onrender.com/api/admin/users/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

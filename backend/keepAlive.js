@@ -1,7 +1,7 @@
 // keepAlive.js
 import axios from "axios";
 
-const BACKEND_URL = "https://excel-analytics-platform-z594.onrender.com"; 
+const BACKEND_URL = "https://excel-analytics-921i.onrender.com"; 
 
 const keepServerAlive = () => {
   setInterval(async () => {

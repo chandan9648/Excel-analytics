@@ -17,10 +17,11 @@ app.use(cors({
     credentials: true,
 
 }));
+
 app.use(express.json());
 
 
-// API routes
+// API ROUTES
 app.use("/api/auth", authRoutes);
 app.use("/api", uploadRoutes);
 app.use("/api/admin", adminRoutes);
