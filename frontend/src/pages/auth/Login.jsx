@@ -18,7 +18,7 @@ const Login = ({ setRole }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://excel-analytics-platform-z594.onrender.com/api/auth/login", data, {
+      const res = await axios.post("https://excel-analytics-921i.onrender.com/api/auth/login", data, {
           withCredentials: true,
         }
       );

@@ -27,7 +27,7 @@ export default function ResetPassword() {
 
     try {
       const res = await axios.put(
-        `https://excel-analytics-platform-z594.onrender.com/api/auth/reset-password/${token}`,
+        `https://excel-analytics-921i.onrender.com/api/auth/reset-password/${token}`,
         { password }
       );
       

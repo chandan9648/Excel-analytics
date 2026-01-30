@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://excel-analytics-platform-z594.onrender.com/api", // Or your deployed URL
+  baseURL: "https://excel-analytics-921i.onrender.com/api", // Or your deployed URL
 });
 
 API.interceptors.request.use((config) => {

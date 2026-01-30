@@ -5,7 +5,7 @@ import API from '../api';
 
 
 
-const API_Base_URL = "https://excel-analytics-platform-z594.onrender.com";
+const API_Base_URL = "https://excel-analytics-921i.onrender.com";
 
 export const AuthContext = createContext();
 
