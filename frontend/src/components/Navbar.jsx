@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import x from "../assets/x.png";
 
 const Navbar = () => {
-  const { user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const location = useLocation();
 
   // Hide navbar on certain routes (optional)
@@ -14,33 +14,35 @@ const Navbar = () => {
   if (isHidden) return null;
 
   return (
-    <nav className="flex items-center justify-between   bg-green-200 shadow">
-      {/* Logo only when user is NOT logged in */}
-      {!user && (
-        <div className="text-2xl font-bold text-green-900 flex items-center gap-2">
-          <img src={x} alt="Logo" className="w-12 h-8" />
-          Excel Analytics
-        </div>
-      )}
+    <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-sm ring-1 ring-black/5">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3 flex items-center justify-between">
+        {/* Logo only when user is NOT logged in */}
+        {!user && (
+          <div className="flex items-center gap-2 text-lg sm:text-xl font-semibold tracking-tight text-gray-900">
+            <img src={x} alt="Excel Analytics Logo" className="w-10 h-7" />
+            Excel Analytics
+          </div>
+        )}
 
-      {/* Right side: Buttons */}
-      <div className="flex items-center space-x-5 ml-auto ">
-        {!user ? (
-          <>
-            <Link
-              to="/login"
-              className="text-lg hover:underline bg-linear-to-r/hsl from-indigo-500 to-blue-400 rounded-xl  px-4 py-2  text-white"
-            >
-              <b>Login</b>
-            </Link>
-            <Link
-              to="/signup"
-              className="text-lg hover:underline bg-linear-to-r/hsl from-indigo-500 to-blue-400 rounded-xl  px-4 py-2 text-white"
-            >
-              <b>Signup</b>
-            </Link>
-          </>
-        ) : null} 
+        {/* Right side: Buttons */}
+        <div className="flex items-center gap-3 sm:gap-4 ml-auto">
+          {!user ? (
+            <>
+              <Link
+                to="/login"
+                className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-blue-500 shadow-sm hover:shadow transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-blue-500 shadow-sm hover:shadow transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
+              >
+                Signup
+              </Link>
+            </>
+          ) : null}
+        </div>
       </div>
     </nav>
   );
