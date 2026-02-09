@@ -12,7 +12,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [active, setActive] = useState("dashboard"); // 'dashboard' | 'settings'
+  const [active, setActive] = useState("dashboard"); 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Settings form state
@@ -118,7 +118,7 @@ const AdminPanel = () => {
         transform transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         lg:static lg:translate-x-0`}
       >
-        <div className="p-6 font-bold text-2xl text-center">
+        <div className="p-6 font-bold text-2xl text-center text-black">
           Excel Analytics
         </div>
         <nav className="flex-1">
