@@ -10,10 +10,16 @@ import sendEmail from '../email.js';
 export const signup = async (req, res) => {
   
   try {
-    const { name, email, password, role  } = req.body;
+    const { name, email, password, role } = req.body;
 
-    if (!name || !email || !password || !role) {
+    const effectiveRole = role || 'user';
+
+    if (!name || !email || !password) {
       return res.status(400).json({ msg: 'All fields are required' });
+    }
+
+    if (!['user', 'admin'].includes(effectiveRole)) {
+      return res.status(400).json({ msg: 'Invalid role' });
     }
   
     if (password.length < 6) {
@@ -32,7 +38,7 @@ export const signup = async (req, res) => {
       name,
       email: trimmedEmail,
       password,
-      role,
+      role: effectiveRole,
     });
 
 

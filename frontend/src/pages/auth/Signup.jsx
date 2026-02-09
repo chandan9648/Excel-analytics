@@ -14,6 +14,7 @@ const Signup = () => {
     role: "user",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [submitState, setSubmitState] = useState("idle");
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -21,23 +22,27 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (submitState !== "idle") return;
+    setSubmitState("submitting");
 
     try {
       await axios.post("https://excel-analytics-921i.onrender.com/api/auth/signup", data, {
           withCredentials: true,
         }
       );
-      toast.success("Signup successful ✅", {
+      toast.success("Registration successful ✅", {
         position: "top-right",
         autoClose: 3000,
       });
+      setSubmitState("success");
       setTimeout(() => navigate("/login"), 3000);
     } catch (err) {
-      console.error("Signup failed:", err);
-      toast.error(err.response?.data?.msg || "Signup failed ❌", {
+      console.error("Registration failed:", err?.response?.data || err?.message);
+      toast.error(err.response?.data?.msg || "Registration failed ❌", {
         position: "top-right",
         autoClose: 3000,
       });
+      setSubmitState("idle");
     }
   };
 
@@ -48,7 +53,7 @@ const Signup = () => {
         onSubmit={handleSubmit}
         className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-sm  mx-auto"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
 
         <label className="">Full name</label>
         <input
@@ -89,9 +94,19 @@ const Signup = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition cursor-pointer"
+          disabled={submitState !== "idle"}
+          aria-busy={submitState === "submitting"}
+          className={`w-full py-2 rounded transition ${
+            submitState !== "idle"
+              ? "bg-blue-500/70 text-white cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+          }`}
         >
-          Sign Up
+          {submitState === "submitting"
+            ? "Registering..."
+            : submitState === "success"
+              ? "Redirecting..."
+              : "Register"}
         </button>
 
         <p className="mt-4 text-sm text-center">

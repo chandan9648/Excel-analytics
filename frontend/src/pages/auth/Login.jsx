@@ -10,6 +10,7 @@ const Login = ({ setRole }) => {
   const { login } = useContext(AuthContext);
   const [data, setData] = useState({ email: "", password: "", role: "user" });
   const [showPassword, setShowPassword] = useState(false);
+  const [submitState, setSubmitState] = useState("idle");
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -17,12 +18,14 @@ const Login = ({ setRole }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      if (submitState !== "idle") return;
+    setSubmitState("submitting");
     try {
       const res = await axios.post("https://excel-analytics-921i.onrender.com/api/auth/login", data, {
           withCredentials: true,
         }
       );
-      
+      setSubmitState("idle");
 
       login(res.data.token);
       setRole(res.data.user.role);
@@ -43,6 +46,7 @@ const Login = ({ setRole }) => {
         position: "top-right",
         autoClose: 2000,
       }); 
+      setSubmitState("idle");
     }
   };
 
@@ -89,17 +93,27 @@ const Login = ({ setRole }) => {
            </Link>
         </p>
 
-        <button
+           <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition cursor-pointer"
+          disabled={submitState !== "idle"}
+          aria-busy={submitState === "submitting"}
+          className={`w-full py-2 rounded transition ${
+            submitState !== "idle"
+              ? "bg-blue-500/70 text-white cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+          }`}
         >
-          Login
+          {submitState === "submitting"
+            ? "Logging in..."
+            : submitState === "success"
+              ? "Redirecting..."
+              : "Login"}
         </button>
 
         <p className="mt-4 text-sm text-center">
           Don’t have an account?{" "}
           <Link to="/signup" className="text-blue-500 cursor-pointer">
-            Signup
+            Register
           </Link>
         </p>
       </form>
