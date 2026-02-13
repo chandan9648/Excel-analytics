@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Card } from "../../components/Card";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Eye, EyeOff } from "lucide-react"; 
+import { Eye, EyeOff } from "lucide-react";
 
 const Signup = () => {
   const [data, setData] = useState({
@@ -26,21 +26,25 @@ const Signup = () => {
     setSubmitState("submitting");
 
     try {
-      await axios.post("https://excel-analytics-921i.onrender.com/api/auth/signup", data, {
-          withCredentials: true,
-        }
+      const res = await axios.post("https://excel-analytics-921i.onrender.com/api/auth/signup", data, {
+        withCredentials: true,
+      }
       );
+
+    
+
+      localStorage.setItem("token", res.data.token);
       toast.success("Registration successful ✅", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
       setSubmitState("success");
-      setTimeout(() => navigate("/login"), 3000);
+      navigate("/login");
     } catch (err) {
       console.error("Registration failed:", err?.response?.data || err?.message);
       toast.error(err.response?.data?.msg || "Registration failed ❌", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
       setSubmitState("idle");
     }
@@ -96,11 +100,10 @@ const Signup = () => {
           type="submit"
           disabled={submitState !== "idle"}
           aria-busy={submitState === "submitting"}
-          className={`w-full py-2 rounded transition ${
-            submitState !== "idle"
+          className={`w-full py-2 rounded transition ${submitState !== "idle"
               ? "bg-blue-500/70 text-white cursor-not-allowed"
               : "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
-          }`}
+            }`}
         >
           {submitState === "submitting"
             ? "Registering..."

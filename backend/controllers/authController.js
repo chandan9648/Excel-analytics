@@ -56,7 +56,7 @@ export const signup = async (req, res) => {
 
   
     //  Send welcome email using SendGrid
-    await sendEmail(
+     sendEmail(
       email,
       "Welcome to Our Platform 🎉",
       `
