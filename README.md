@@ -86,5 +86,5 @@ Inspired by real-world analytics dashboards like Power BI and Chart Studio. Buil
 
 📬 Contact
 Developer: Chandan Chaudhary
-Email: chandanchaudhary1710@gmail.com
+Email: chandankkumar156@gmail.com
 GitHub: github.com/chandan9648
