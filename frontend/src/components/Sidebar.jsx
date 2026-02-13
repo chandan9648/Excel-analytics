@@ -9,7 +9,7 @@ import {
   FaCog,
 } from "react-icons/fa";
 
-// Responsive Sidebar: slide-in on mobile; unchanged styling/colors
+
 const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
   return (
     <>

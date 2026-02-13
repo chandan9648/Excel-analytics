@@ -54,8 +54,7 @@ export const signup = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-
-    
+  
     //  Send welcome email using SendGrid
     await sendEmail(
       email,

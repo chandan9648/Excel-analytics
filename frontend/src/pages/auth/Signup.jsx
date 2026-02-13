@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Card } from "../../components/Card";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Eye, EyeOff } from "lucide-react"; // Optional icon set
+import { Eye, EyeOff } from "lucide-react"; 
 
 const Signup = () => {
   const [data, setData] = useState({
@@ -86,7 +86,7 @@ const Signup = () => {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-2.5 text-gray-600"
+            className="absolute right-3 top-2.5 text-gray-600 cursor-pointer"
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>

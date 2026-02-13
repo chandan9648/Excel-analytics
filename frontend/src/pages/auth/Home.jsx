@@ -4,7 +4,7 @@ import bg from "../../assets/bg.png";
 
 
 const Home = () => {
-  // const {  } = useContext(AuthContext);
+
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-purple-600 via-purple-500 to-emerald-400 flex items-center justify-center px-4 sm:px-6">
